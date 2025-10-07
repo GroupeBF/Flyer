@@ -25,13 +25,24 @@
       align-items: center;
       opacity: 0;
       transition: opacity 0.5s ease-in-out;
-      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
-      background-size: cover;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
       height: 100vh;
+      heigh: 100vdh
      
     }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+      will-change: transform;
+      transform: translateZ(0); /* empêche les artefacts de défilement */
+}
+
 
 
     .title {
