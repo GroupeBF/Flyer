@@ -3,13 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fraises carbure</title>
+<title>Forets carbure</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'TT Lakes', sans-serif;
     margin: 0;
-    background: #f0f0f0;
+    padding: 0;
+    display: flex;
     text-align: center;
+    align-items: center;
+    flex-direction: column;            
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    width: 100vw;
   }
 
   h2 {
@@ -98,7 +104,7 @@
 </head>
 <body>
 
-<h2>Fraises carbure</h2>
+<h2>Forets carbure</h2>
 <div class="gallery" id="gallery"></div>
 
 <!-- Fenêtre modale -->
@@ -113,7 +119,7 @@
 // 🔧 à adapter : ton lien JSON du Google Sheet (format CSV ou JSON)
 const sheetId = "TON_ID_DE_FEUILLE";
 const sheetName = "Fraises"; // nom de la feuille
-const url = `https://opensheet.elk.sh/${sheetId}/${sheetName}`;
+const url = `https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=Forets carbure`;
 
 fetch(url)
   .then(r => r.json())
