@@ -13,35 +13,41 @@
             font-family: 'TT Lakes';
             src: url('Police TTLakes.ttf') format('truetype');
         }
-    body {
-            font-family: 'TT Lakes', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            text-align: center;
-            align-items: center;
-            flex-direction: column;            
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            width: 100vw;
-            
-            background-image: url('Photo outil-plaquette-carbure-brase.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+   
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
+
+    body {
+      font-family: 'TT Lakes', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
 
     .title {
         font-family: 'Engravers', sans-serif;
         font-size: 20px;
-        margin-top: 20px;
+        margin: 0;
         text-align: center;
-        color: rgb(255, 255, 255); 
+        color: white; 
         font-weight: bold;
         background-color: rgba(227, 6, 19, 1); 
         width:100vw;
-        padding-top:5px;
-        padding-bottom:5px;
+        padding: 8px 0;
     }
 
     .container {
@@ -50,6 +56,9 @@
       justify-content: center;
       gap: 10px;
       padding: 10px;
+      flex: 1;
+      align-content: center;
+      box-sizing: border-box;
     }
 
     .categorie {
@@ -68,8 +77,8 @@
     }
 
     .categorie img {
-      width: 110% ;
-      height: auto;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       filter: brightness(75%);
       transition: filter 0.3s ease;
