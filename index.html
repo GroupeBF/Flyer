@@ -14,30 +14,20 @@
             src: url('Police TTLakes.ttf') format('truetype');
         }
 
-  /* === RESET / base === */
-  html,body{height:100%;margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
-  *,*::before,*::after{box-sizing:inherit}
-
-  /* === VARIABLE VH (sera définie en JS) ===
-     --vh vaut 1% de la hauteur visible (window.innerHeight) */
-  :root { --vh: 1vh; }
-
-  /* === BACKGROUND fixe via élément dédié === */
-  .site-bg{
-    position: fixed;
-    inset: 0;
-    z-index: -9999;               /* derrière tout */
-    pointer-events: none;        /* ne capte pas le scroll/touch */
-    background-image: url('Photo outil-plaquette-carbure-brase.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    /* smoothing hints : */
-    will-change: transform, background-position;
-    -webkit-backface-visibility: hidden;
-    transform: translateZ(0);
-  }
-
+body {
+      font-family: 'TT Lakes', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed; /* ✅ Fond fixe même quand on défile */
+      background-repeat: no-repeat;
+      min-height: 100dvh;
+    }
 
 
     .title {
