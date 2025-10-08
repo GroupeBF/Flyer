@@ -15,214 +15,232 @@
         }
 
 body {
-      font-family: 'TT Lakes', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      text-align: center;
-      align-items: center;
-      flex-direction: column;            
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      min-height: 100dvh;
-    }
-
-
-    .title {
-        position: fixed; 
-        display: inline-block;
-        font-family: 'Engravers', sans-serif;
-        font-size: 20px;
-        top: 10px;
-        margin-bottom: 20px;
-        text-align: center;
-        color: white; 
-        font-weight: bold;
-        background-color: rgba(227, 6, 19, 1); 
-        width:100vw;
-        padding: 8px 0;
-        animation: pulsate 1s ease-in-out infinite;
-    }
-
-    .content {
-      padding-top: 80px;
-      padding-bottom: 300px; /* espace au-dessus du logo */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      width: 100%;
-      max-width: 1000px;
-      box-sizing: border-box;
-    }
-
-    .categorie {
-      position: relative;
-      width: 45%;
-      aspect-ratio: 1 / 1.5;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .categorie:hover {
-      transform: scale(1.05);
-    }
-
-    .categorie img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: brightness(75%);
-      transition: filter 0.3s ease;
-    }
-
-    .categorie:hover img {
-      filter: brightness(100%);
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: 'Engravers', sans-serif;
-      font-size: 12px;
-      background-color: rgba(0, 0, 0, 0.3);
-      transition: background-color 0.3s ease;
-      padding: 10px;
-      box-sizing: border-box;
-      text-align: center;
-    }
-    
-    .categorie:hover .overlay {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-
-            #logoBF {
-            width: 100%;
-            height: auto;
-            max-width: 400px;
-    
-        }
-
-        .logo-container {
-            position: fixed; 
-            background-color: rgba(255, 255, 255, 0.8);
-            max-width: 400px;
-            border: 1px solid rgb(150, 150, 150);
-            width: 95%;
-            border-radius:15px;
-            display: inline-block;
-            bottom: 10px;
+  font-family: 'TT Lakes', sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: white;
+  background-image: url('Photo outil-plaquette-carbure-brase.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
-    /* Animation de pulsation */
+/* Titre fixe */
+.title {
+  position: fixed;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  background-color: rgba(227, 6, 19, 1);
+  font-family: 'Engravers', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 8px 0;
+  animation: pulsate 1s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Conteneur global des carrousels */
+.content {
+  padding-top: 80px;
+  padding-bottom: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Titre de section (Affûtage / Fabrication / Fourniture) */
+.section-title {
+  font-family: 'Engravers', sans-serif;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(0,0,0,0.4);
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* Carrousel horizontal */
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding: 10px 0;
+  width: 95%;
+  justify-content: flex-start;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Onglets (catégories) */
+.categorie {
+  position: relative;
+  flex: 0 0 60%;
+  scroll-snap-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.categorie img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(75%);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Engravers', sans-serif;
+  font-size: 14px;
+  background-color: rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 3px black;
+}
+
+/* Logo fixe */
+.logo-container {
+  position: fixed;
+  bottom: 10px;
+  background-color: rgba(255,255,255,0.8);
+  border: 1px solid rgb(150,150,150);
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  z-index: 10;
+}
+
+#logoBF {
+  width: 100%;
+  height: auto;
+}
+
+/* Animation pulsation titre */
 @keyframes pulsate {
-    0% {
-        transform: scale(1); /* Taille normale du texte */
-        opacity: 1; /* Opacité normale */
-    }
-    50% {
-        transform: scale(1.03); /* Agrandir légèrement le texte */
-    }
-    100% {
-        transform: scale(1); /* Retour à la taille normale */
-        opacity: 1; /* Opacité normale */
-    }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
+/* Animation fade */
+.fade-in { opacity: 1; }
+.fade-out { opacity: 0; }
 
-    /* Animation fade */
-    .fade-in { opacity: 1; }
-    .fade-out { opacity: 0; }
   </style>
 </head>
 <body>
 
-  
+  <h2 class="title">Découvrez nos réalisations</h2>
 
-<div class="content">
-  <div class="container">
-    <a href="Sous page fraises carbure.html" class="categorie">
-      <img src="Photo fraise carbure.jpg" alt="Fraises carbure">
-      <div class="overlay">Fraises carbure</div>
-    </a>
+  <div class="content">
 
-    <a href="Sous page forets carbure.html" class="categorie">
-      <img src="Photo foret facettes carbure.jpg" alt="Forets carbure">
-      <div class="overlay">Forets carbure</div>
-    </a>
+    <!-- Section 1 : Affûtage -->
+    <div>
+      <h3 class="section-title">Affûtage</h3>
+      <div class="carousel">
+        <a href="Sous page fraises carbure.html" class="categorie">
+          <img src="Photo fraise carbure.jpg" alt="Fraises carbure">
+          <div class="overlay">Fraises carbure</div>
+        </a>
+
+        <a href="Sous page forets HSS.html" class="categorie">
+          <img src="Photo foret facettes HSS.jpg" alt="Forets HSS">
+          <div class="overlay">Forets HSS</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section 2 : Fabrication -->
+    <div>
+      <h3 class="section-title">Fabrication</h3>
+      <div class="carousel">
+        <a href="Sous page circulaires.html" class="categorie">
+          <img src="Photo circulaire carbure.jpg" alt="Circulaires">
+          <div class="overlay">Circulaires</div>
+        </a>
 
         <a href="Sous page fraises HSS.html" class="categorie">
-      <img src="Photo fraise HSS.jpg" alt="Fraises HSS">
-      <div class="overlay">Fraises HSS</div>
-    </a>
+          <img src="Photo fraise HSS.jpg" alt="Fraises HSS">
+          <div class="overlay">Fraises HSS</div>
+        </a>
+      </div>
+    </div>
 
-    <a href="Sous page forets HSS.html" class="categorie">
-      <img src="Photo foret facettes HSS.jpg" alt="Forets HSS">
-      <div class="overlay">Forets HSS</div>
-    </a>
-
-    <a href="Sous page autre HSS.html" class="categorie">
-      <img src="Photo foret facettes HSS.jpg" alt="Autres HSS">
-      <div class="overlay">Autres HSS</div>
-    </a>
-    
-    <a href="Sous page circulaires.html" class="categorie">
-      <img src="Photo circulaire carbure.jpg" alt="Circulaires">
-      <div class="overlay">Circulaires</div>
-    </a>
+    <!-- Section 3 : Fourniture -->
+    <div>
+      <h3 class="section-title">Fourniture</h3>
+      <div class="carousel">
+        <a href="Sous page autre HSS.html" class="categorie">
+          <img src="Photo foret facettes carbure.jpg" alt="Autres HSS">
+          <div class="overlay">Autres HSS</div>
+        </a>
+      </div>
+    </div>
   </div>
-</div>
-    
-    <h2 class="title">Découvrez nos réalisations</h2>
-  
-    <div class="logo-container"> 
-        <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"> 
-    </div>  
-  
+
+  <div class="logo-container"> 
+    <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"> 
+  </div>  
+
   <script>
   document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("fade-in");
 
+    // Effet fade-out au clic
     document.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", function(event) {
-        if (this.href.startsWith(window.location.origin)) {
-          event.preventDefault();
-          let destination = this.href;
-          document.body.classList.add("fade-out");
-          setTimeout(() => {
-            window.location.href = destination;
-          }, 400);
-        }
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const dest = link.href;
+        document.body.classList.add("fade-out");
+        setTimeout(() => window.location.href = dest, 400);
       });
     });
-    
-      window.addEventListener("pageshow", event => {
-    if (event.persisted) {
-      document.body.classList.remove("fade-out");
-      document.body.classList.add("fade-in");
-    }
+
+    // Effet zoom sur l’élément centré dans le carrousel
+    const carousels = document.querySelectorAll(".carousel");
+
+    carousels.forEach(carousel => {
+      carousel.addEventListener("scroll", () => {
+        const items = carousel.querySelectorAll(".categorie");
+        const center = carousel.scrollLeft + carousel.offsetWidth / 2;
+        items.forEach(item => {
+          const boxCenter = item.offsetLeft + item.offsetWidth / 2;
+          const distance = Math.abs(center - boxCenter);
+          const scale = Math.max(0.9, 1.2 - distance / 500);
+          const opacity = Math.max(0.5, 1.2 - distance / 300);
+          item.style.transform = `scale(${scale})`;
+          item.style.opacity = opacity;
+        });
+      });
+      carousel.dispatchEvent(new Event("scroll")); // initialisation
+    });
+
+    // Gestion pageshow (back)
+    window.addEventListener("pageshow", e => {
+      if (e.persisted) {
+        document.body.classList.remove("fade-out");
+        document.body.classList.add("fade-in");
+      }
+    });
   });
-});
   </script>
 
 </body>
