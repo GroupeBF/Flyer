@@ -154,7 +154,16 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
     const rect = origItems[0].getBoundingClientRect();
     return rect.width > 10;
   };
-     if (currentWidth >= targetWidth) {
+
+  function prepare() {
+    const visible = carousel.clientWidth || window.innerWidth;
+    // decide how many total children we want so that scrollWidth >= visible * minRepeatFactor
+    const currentWidth = carousel.scrollWidth;
+    const targetWidth = visible * minRepeatFactor;
+    let cloneCount = 0;
+
+    // if already wide enough, do nothing
+    if (currentWidth >= targetWidth) {
       attachCenterListener();
       return;
     }
@@ -237,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // init each carousel
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 15); // 15x visible width -> très long
+    initPracticalInfiniteCarousel(car, 8); // 8x visible width -> très long
   });
 
   // keep original click fade-out behavior for links inside categories
