@@ -84,6 +84,25 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
+
+    .categorie {
+  flex: 0 0 240px; /* largeur fixe */
+  height: 160px;
+  flex-shrink: 0;
+  width: 240px; /* <-- on ajoute aussi width */
+  box-sizing: border-box;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
+  transform: scale(0.92);
+  opacity: 0.6;
+  transition: transform 220ms ease, opacity 220ms ease;
+  scroll-snap-align: center;
+  background: #222;
+  position: relative;
+  cursor: pointer;
+}
+    
     .carousel::-webkit-scrollbar{ display:none; }
 
     .categorie img{ width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
@@ -123,22 +142,6 @@
         opacity: 1; /* Opacité normale */
     }
 }
-
-        .categorie {
-      flex: 0 0 240px !important; /* largeur fixe */
-      height: 160px !important;
-      flex-shrink: 0;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
-      transform: scale(0.92);
-      opacity: 0.6;
-      transition: transform 220ms ease, opacity 220ms ease;
-      scroll-snap-align: center;
-      background: #222;
-      position: relative;
-      cursor: pointer;
-    }
     
   </style>
 </head>
@@ -194,9 +197,7 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
 
   // compute one item width after images loaded
   const ensureReady = () => {
-    // measure: if width 0, wait
-    const rect = origItems[0].getBoundingClientRect();
-    return rect.width > 10;
+      return true;
   };
 
   function prepare() {
