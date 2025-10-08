@@ -24,18 +24,30 @@
     }
 
     .title {
-      position: fixed; top:10px; left:0;
-      width:100vw; padding:8px 0;
-      font-family:'Engravers'; font-size:20px;
-      background: rgba(227,6,19,1); z-index:20; font-weight:bold;
+      position: fixed; 
+      top:10px; 
+      left:0;
+      width:100vw; 
+      padding:8px 0;
+      font-family:'Engravers'; 
+      font-size:20px;
+      background: rgba(227,6,19,1); 
+      z-index:20; 
+      font-weight:bold;
+      animation: pulsate 1s ease-in-out infinite;
     }
 
     .logo-container {
-      position: fixed; bottom:10px; left:50%;
+      position: fixed; 
+      bottom:10px; 
+      left:50%;
       transform: translateX(-50%);
       z-index:20;
       background: rgba(255,255,255,0.85);
-      border-radius:15px; padding:6px; max-width:400px; width:92%;
+      border-radius:15px; 
+      padding:6px; 
+      max-width:400px; 
+      width:92%;
       border:1px solid rgba(0,0,0,0.12);
     }
 
@@ -98,6 +110,21 @@
     @media (max-width:720px){
       .categorie { flex:0 0 70%; }
     }
+
+    /* Animation de pulsation */
+@keyframes pulsate {
+    0% {
+        transform: scale(1); /* Taille normale du texte */
+        opacity: 1; /* Opacité normale */
+    }
+    50% {
+        transform: scale(1.03); /* Agrandir légèrement le texte */
+    }
+    100% {
+        transform: scale(1); /* Retour à la taille normale */
+        opacity: 1; /* Opacité normale */
+    }
+}
   </style>
 </head>
 <body>
