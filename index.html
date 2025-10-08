@@ -5,261 +5,224 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nos Réalisations</title>
   <style>
-       @font-face {
-            font-family: 'Engravers';
-            src: url('Police Engravers.ttf') format('truetype');
-        }
-        @font-face {
-            font-family: 'TT Lakes';
-            src: url('Police TTLakes.ttf') format('truetype');
-        }
+    @font-face {
+      font-family: 'Engravers';
+      src: url('Police Engravers.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'TT Lakes';
+      src: url('Police TTLakes.ttf') format('truetype');
+    }
 
-body {
-  font-family: 'TT Lakes', sans-serif;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  align-items: center;
-  align-content: center;
-  color: white;
-  background-image: url('Photo outil-plaquette-carbure-brase.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  min-height: 100dvh;
-  overflow-x: hidden;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
+    body {
+      font-family: 'TT Lakes', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      overflow-y: scroll;
+      color: white;
+      min-height: 100vh;
+    }
 
-.title {
-  position: fixed;
-  top: 10px;
-  left: 0;
-  width: 100%;
-  background-color: rgba(227, 6, 19, 1);
-  font-family: 'Engravers', sans-serif;
-  font-size: 25px;
-  font-weight: bold;
-  padding: 8px 0;
-  animation: pulsate 1s ease-in-out infinite;
-  z-index: 10;
-}
+    .title {
+      position: fixed;
+      top: 10px;
+      font-family: 'Engravers', sans-serif;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      background-color: rgba(227, 6, 19, 1);
+      width: 100vw;
+      padding: 8px 0;
+      animation: pulsate 1s ease-in-out infinite;
+      z-index: 10;
+    }
 
-/* Conteneur global des carrousels */
-.content {
-  padding-top: 80px;
-  padding-bottom: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  align-items: center;
-}
+    .logo-container {
+      position: fixed;
+      bottom: 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgb(150, 150, 150);
+      border-radius: 15px;
+      max-width: 400px;
+      width: 95%;
+      display: inline-block;
+      z-index: 10;
+    }
 
-/* Titre de section (Affûtage / Fabrication / Fourniture) */
-.section-title {
-  font-family: 'Engravers', sans-serif;
-  font-size: 18px;
-  color: white;
-  background-color: rgba(0,0,0,0.4);
-  padding: 6px 12px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 10px;
-}
+    #logoBF {
+      width: 100%;
+      height: auto;
+      max-width: 400px;
+    }
 
-/* Carrousel horizontal */
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  gap: 20px;
-  padding: 10px 0;
-  width: 95%;
-  justify-content: flex-start;
-}
+    .content {
+      margin-top: 80px;
+      margin-bottom: 250px;
+      width: 100%;
+    }
 
-.carousel::-webkit-scrollbar {
-  display: none;
-}
+    .section {
+      margin: 40px 0;
+    }
 
-/* Onglets (catégories) */
-.categorie {
-  position: relative;
-  flex: 0 0 30%;
-  scroll-snap-align: center;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
-}
+    .section h2 {
+      font-family: 'Engravers', sans-serif;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
 
-.categorie img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: brightness(75%);
-}
+    .carousel {
+      display: flex;
+      gap: 15px;
+      scroll-snap-type: x mandatory;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      padding: 20px;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+    }
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-family: 'Engravers', sans-serif;
-  font-size: 14px;
-  background-color: rgba(0,0,0,0.3);
-  text-shadow: 1px 1px 3px black;
-}
+    .categorie {
+      position: relative;
+      flex: 0 0 250px;
+      aspect-ratio: 1 / 1.3;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+      scroll-snap-align: center;
+      transition: transform 0.3s, opacity 0.3s;
+      opacity: 0.6;
+      cursor: pointer;
+    }
 
-/* Logo fixe */
-.logo-container {
-  position: fixed;
-  align-items: center;
-  align-content: center;
-  bottom: 10px;
-  background-color: rgba(255,255,255,0.8);
-  border: 1px solid rgb(150,150,150);
-  border-radius: 15px;
-  width: 90%;
-  max-width: 400px;
-  z-index: 10;
-}
+    .categorie.active {
+      transform: scale(1.1);
+      opacity: 1;
+    }
 
-#logoBF {
-  width: 100%;
-  height: auto;
-}
+    .categorie img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(80%);
+      transition: filter 0.3s ease;
+    }
 
-/* Animation pulsation titre */
-@keyframes pulsate {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
-}
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Engravers', sans-serif;
+      font-size: 12px;
+      background-color: rgba(0, 0, 0, 0.3);
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+    }
 
-/* Animation fade */
-.fade-in { opacity: 1; }
-.fade-out { opacity: 0; }
-
+    @keyframes pulsate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
+
 <body>
 
   <h2 class="title">Découvrez nos réalisations</h2>
 
   <div class="content">
 
-    <!-- Section 1 : Affûtage -->
-    <div>
-      <h3 class="section-title">Affûtage</h3>
+    <!-- SECTION AFFÛTAGE -->
+    <div class="section">
+      <h2>Affûtage</h2>
       <div class="carousel">
-        <a href="Sous page fraises carbure.html" class="categorie">
-          <img src="Photo fraise carbure.jpg" alt="Fraises carbure">
-          <div class="overlay">Fraises carbure</div>
-        </a>
-
-        <a href="Sous page forets carbure.html" class="categorie">
-          <img src="Photo foret facettes carbure.jpg" alt="Forets carbure">
-          <div class="overlay">Forets carbures</div>
-        </a>
-        
-        <a href="Sous page forets HSS.html" class="categorie">
-          <img src="Photo foret facettes HSS.jpg" alt="Forets HSS">
-          <div class="overlay">Forets HSS</div>
-        </a>
+        <div class="categorie"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></div>
+        <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></div>
+        <div class="categorie"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></div>
       </div>
     </div>
 
-    <!-- Section 2 : Fabrication -->
-    <div>
-      <h3 class="section-title">Fabrication</h3>
+    <!-- SECTION FABRICATION -->
+    <div class="section">
+      <h2>Fabrication</h2>
       <div class="carousel">
-        <a href="Sous page circulaires.html" class="categorie">
-          <img src="Photo circulaire carbure.jpg" alt="Circulaires">
-          <div class="overlay">Circulaires</div>
-        </a>
-
-        <a href="Sous page fraises HSS.html" class="categorie">
-          <img src="Photo fraise HSS.jpg" alt="Fraises HSS">
-          <div class="overlay">Fraises HSS</div>
-        </a>
+        <div class="categorie"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></div>
+        <div class="categorie"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></div>
       </div>
     </div>
 
-    <!-- Section 3 : Fourniture -->
-    <div>
-      <h3 class="section-title">Fourniture</h3>
+    <!-- SECTION FOURNITURE -->
+    <div class="section">
+      <h2>Fourniture</h2>
       <div class="carousel">
-        <a href="Sous page autre HSS.html" class="categorie">
-          <img src="Photo foret facettes carbure.jpg" alt="Autres HSS">
-          <div class="overlay">Autres HSS</div>
-        </a>
+        <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></div>
       </div>
     </div>
+
   </div>
 
-  <div class="logo-container"> 
-    <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"> 
-  </div>  
+  <div class="logo-container">
+    <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF">
+  </div>
 
   <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.body.classList.add("fade-in");
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const items = Array.from(carousel.querySelectorAll('.categorie'));
+    const firstItem = items[0];
+    const lastItem = items[items.length - 1];
 
-    // Effet fade-out au clic
-    document.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", e => {
-        e.preventDefault();
-        const dest = link.href;
-        document.body.classList.add("fade-out");
-        setTimeout(() => window.location.href = dest, 400);
+    // Duplication pour boucle infinie
+    carousel.insertBefore(lastItem.cloneNode(true), firstItem);
+    carousel.appendChild(firstItem.cloneNode(true));
+
+    const allItems = Array.from(carousel.querySelectorAll('.categorie'));
+    const itemWidth = items[0].offsetWidth + 15;
+    carousel.scrollLeft = itemWidth;
+
+    function updateActiveItem() {
+      const center = carousel.scrollLeft + carousel.clientWidth / 2;
+      allItems.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        const itemCenter = rect.left + rect.width / 2;
+        const distance = Math.abs(center - itemCenter);
+        item.classList.toggle('active', distance < rect.width / 2);
       });
-    });
-
-    // Effet zoom sur l’élément centré dans le carrousel
-    document.querySelectorAll('.carousel').forEach(carousel => {
-  const items = carousel.querySelectorAll('.categorie');
-  const firstItem = items[0];
-  const lastItem = items[items.length - 1];
-
-  // Duplique les premiers et derniers éléments pour la boucle
-  carousel.insertBefore(lastItem.cloneNode(true), firstItem);
-  carousel.appendChild(firstItem.cloneNode(true));
-
-  const itemWidth = items[0].offsetWidth + 15; // largeur + gap
-  carousel.scrollLeft = itemWidth; // position de départ
-
-  // Ajustement visuel du centre
-  function updateActiveItem() {
-    const center = carousel.scrollLeft + carousel.clientWidth / 2;
-    items.forEach(item => {
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.left + rect.width / 2;
-      const distance = Math.abs(center - itemCenter);
-      item.classList.toggle('active', distance < rect.width / 2);
-    });
-  }
-
-  carousel.addEventListener('scroll', () => {
-    updateActiveItem();
-
-    // Repositionne le scroll pour la boucle infinie
-    if (carousel.scrollLeft <= 0) {
-      carousel.scrollLeft = carousel.scrollWidth - 2 * itemWidth;
-    } else if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
-      carousel.scrollLeft = itemWidth;
     }
+
+    carousel.addEventListener('scroll', () => {
+      updateActiveItem();
+
+      // boucle infinie
+      if (carousel.scrollLeft <= 0) {
+        carousel.scrollLeft = carousel.scrollWidth - 2 * itemWidth;
+      } else if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+        carousel.scrollLeft = itemWidth;
+      }
+    });
+
+    updateActiveItem();
   });
-
-  updateActiveItem();
-});
-
   </script>
 
 </body>
