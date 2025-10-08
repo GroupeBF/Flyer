@@ -27,9 +27,9 @@
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-      overflow-y: scroll;
       color: white;
       min-height: 100vh;
+      overflow-y: scroll;
     }
 
     .title {
@@ -87,12 +87,18 @@
     .carousel {
       display: flex;
       gap: 15px;
-      overflow: hidden;
+      overflow-x: scroll;
+      scroll-behavior: smooth;
       padding: 20px;
       width: 100%;
       box-sizing: border-box;
-      justify-content: center;
-      position: relative;
+      justify-content: start;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
     }
 
     .categorie {
@@ -104,8 +110,9 @@
       box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
       opacity: 0.6;
       transform: scale(0.9);
-      transition: transform 0.5s ease, opacity 0.5s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease;
       cursor: pointer;
+      scroll-snap-align: center;
     }
 
     .categorie.active {
@@ -152,7 +159,7 @@
     <!-- SECTION AFFÛTAGE -->
     <div class="section">
       <h2>Affûtage</h2>
-      <div class="carousel" data-speed="1">
+      <div class="carousel" id="carousel-affutage">
         <div class="categorie"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></div>
         <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></div>
         <div class="categorie"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></div>
@@ -162,7 +169,7 @@
     <!-- SECTION FABRICATION -->
     <div class="section">
       <h2>Fabrication</h2>
-      <div class="carousel" data-speed="1.5">
+      <div class="carousel" id="carousel-fabrication">
         <div class="categorie"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></div>
         <div class="categorie"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></div>
       </div>
@@ -171,7 +178,7 @@
     <!-- SECTION FOURNITURE -->
     <div class="section">
       <h2>Fourniture</h2>
-      <div class="carousel" data-speed="0.7">
+      <div class="carousel" id="carousel-fourniture">
         <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></div>
       </div>
     </div>
@@ -183,26 +190,26 @@
   </div>
 
   <script>
-  // === Carrousel Netflix infini ===
+  // --- REND LES CARROUSELS INFINIS & FLUIDES ---
   document.querySelectorAll('.carousel').forEach(carousel => {
-    const speed = parseFloat(carousel.dataset.speed || 1);
-    let scroll = 0;
+    const items = Array.from(carousel.children);
 
-    // Dupliquer le contenu pour effet infini
-    carousel.innerHTML += carousel.innerHTML;
-    const totalWidth = carousel.scrollWidth / 2;
+    // On duplique le contenu 2x pour créer une illusion de boucle
+    items.forEach(item => carousel.appendChild(item.cloneNode(true)));
+    items.forEach(item => carousel.appendChild(item.cloneNode(true)));
 
-    function loop() {
-      scroll += speed;
-      if (scroll >= totalWidth) scroll = 0;
-      carousel.scrollLeft = scroll;
-      requestAnimationFrame(loop);
-    }
-    loop();
+    // Quand on atteint la fin, on revient au centre sans sursaut
+    carousel.addEventListener('scroll', () => {
+      const scrollLeft = carousel.scrollLeft;
+      const maxScroll = carousel.scrollWidth / 3; // 3 sections identiques
+      if (scrollLeft >= maxScroll * 2) {
+        carousel.scrollLeft = scrollLeft - maxScroll;
+      } else if (scrollLeft < maxScroll / 2) {
+        carousel.scrollLeft = scrollLeft + maxScroll;
+      }
 
-    // Détection de l'élément central actif
-    function updateActive() {
-      const center = carousel.clientWidth / 2;
+      // Mise en avant de l’élément central
+      const center = carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
       let closest = null;
       let minDist = Infinity;
 
@@ -217,9 +224,10 @@
         item.classList.remove('active');
       });
       if (closest) closest.classList.add('active');
-    }
+    });
 
-    setInterval(updateActive, 300);
+    // Positionne le scroll au centre initialement
+    carousel.scrollLeft = carousel.scrollWidth / 3;
   });
   </script>
 
