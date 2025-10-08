@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nos Réalisations — Carrousels infinis (pratique)</title>
+  <title>Nos Réalisations — Carrousels infinis (corrigé)</title>
   <style>
     @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
     @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
 
-    body{
+    body {
       font-family:'TT Lakes',sans-serif;
       margin:0; padding:0;
       text-align:center;
@@ -20,6 +20,7 @@
       background-repeat: no-repeat;
       min-height:100vh;
       overflow-y: auto;
+      transition: background 0.3s ease;
     }
 
     .title {
@@ -34,7 +35,6 @@
       z-index:20; 
       font-weight:bold;
       animation: pulsate 2s ease-in-out infinite;
-      margin-bottom: 20px;
     }
 
     .logo-container {
@@ -49,13 +49,31 @@
       max-width:400px; 
       width:92%;
       border:1px solid rgba(0,0,0,0.12);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
     #logoBF{ width:100%; height:auto; display:block; }
 
-    .content { padding-top:80px; padding-bottom:200px; }
+    .content {
+      padding-top:80px; 
+      padding-bottom:200px;
+      transition: all 0.6s ease;
+    }
 
-    .section { margin: 36px 0; margin-top: 20px; margin-bottom: 20px;}
+    /* Disparition en douceur au scroll */
+    body.scrolled .content {
+      opacity: 0;
+      transform: translateY(-60px);
+      pointer-events: none;
+    }
+
+    body.scrolled .logo-container {
+      opacity: 0;
+      transform: translateY(40px);
+      pointer-events: none;
+    }
+
+    .section { margin: 36px 0; }
 
     .section h2 {
       font-family:'Engravers';
@@ -65,7 +83,6 @@
       background: rgba(255,255,255,0.5); 
       padding:0px 16px; 
       border-radius:8px;
-      left: 10px;
       margin-bottom: 5px;
     }
 
@@ -74,20 +91,21 @@
       width: 97.5%;
       display: flex;
       margin: 0 auto;
-      justify-content: center;
+      justify-content: flex-start; /* corrige le masquage du premier élément */
       gap: 10px;
-      padding-left: 200px;
+      padding: 5px 15px; /* petit espace à gauche */
       box-sizing: border-box;
       overflow-x: auto;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
-    .carousel::-webkit-scrollbar{ display:none; }
+
+    .carousel::-webkit-scrollbar { display:none; }
 
     /* BOX FIXE */
     .categorie {
-      flex: 0 0 140px !important;  /* largeur fixe */
+      flex: 0 0 140px !important;
       width: 140px !important;
       height: 100px !important;
       flex-shrink: 0;
@@ -104,7 +122,7 @@
       cursor: pointer;
     }
 
-    .categorie img{ width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
+    .categorie img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
     .categorie.active { transform: scale(1.08); opacity: 1; }
 
     .overlay {
@@ -164,90 +182,98 @@
 
   <div class="logo-container"><img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"></div>
 
-<script>
-function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
-  const origItems = Array.from(carousel.querySelectorAll('.categorie'));
-  if (!origItems.length) return;
+  <script>
+  function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
+    const origItems = Array.from(carousel.querySelectorAll('.categorie'));
+    if (!origItems.length) return;
 
-  function prepare() {
-    const visible = carousel.clientWidth || window.innerWidth;
-    const targetWidth = visible * minRepeatFactor;
+    function prepare() {
+      const visible = carousel.clientWidth || window.innerWidth;
+      const targetWidth = visible * minRepeatFactor;
 
-    // Appliquer largeur fixe aux originaux
-    origItems.forEach(it => {
-      it.style.flex = '0 0 240px';
-      it.style.width = '240px';
-    });
-
-    // Clonage infini
-    while (carousel.scrollWidth < targetWidth) {
+      // Largeur fixe
       origItems.forEach(it => {
-        const clone = it.cloneNode(true);
-        clone.removeAttribute('id');
-        clone.style.flex = '0 0 240px';
-        clone.style.width = '240px';
-        carousel.appendChild(clone);
+        it.style.flex = '0 0 140px';
+        it.style.width = '140px';
       });
-    }
 
-    attachCenterListener();
-  }
-
-  function attachCenterListener() {
-    let ticking = false;
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          updateActiveCenter();
-          ticking = false;
+      // Clonage infini
+      while (carousel.scrollWidth < targetWidth) {
+        origItems.forEach(it => {
+          const clone = it.cloneNode(true);
+          clone.removeAttribute('id');
+          clone.style.flex = '0 0 140px';
+          clone.style.width = '140px';
+          carousel.appendChild(clone);
         });
-        ticking = true;
       }
+
+      attachCenterListener();
     }
-    carousel.addEventListener('scroll', onScroll, { passive: true });
-    updateActiveCenter();
-    window.addEventListener('resize', () => {
-      clearTimeout(carousel._resizeTO);
-      carousel._resizeTO = setTimeout(updateActiveCenter, 120);
-    });
-  }
 
-  function updateActiveCenter() {
-    const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
-    let closest = null;
-    let minDist = Infinity;
-    const items = Array.from(carousel.querySelectorAll('.categorie'));
-    items.forEach(item => {
-      const itemLeft = item.offsetLeft;
-      const itemCenter = itemLeft + item.offsetWidth / 2;
-      const dist = Math.abs(centerX - itemCenter);
-      if (dist < minDist) { minDist = dist; closest = item; }
-      item.classList.remove('active');
-    });
-    if (closest) closest.classList.add('active');
-  }
-
-  // préparation directe
-  prepare();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 20);
-  });
-
-  document.querySelectorAll('.categorie').forEach(link => {
-    if (link.tagName.toLowerCase() === 'a') {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const dest = link.href;
-        document.body.classList.add('fade-out');
-        setTimeout(() => location.href = dest, 380);
+    function attachCenterListener() {
+      let ticking = false;
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateActiveCenter();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+      carousel.addEventListener('scroll', onScroll, { passive: true });
+      updateActiveCenter();
+      window.addEventListener('resize', () => {
+        clearTimeout(carousel._resizeTO);
+        carousel._resizeTO = setTimeout(updateActiveCenter, 120);
       });
     }
+
+    function updateActiveCenter() {
+      const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
+      let closest = null;
+      let minDist = Infinity;
+      const items = Array.from(carousel.querySelectorAll('.categorie'));
+      items.forEach(item => {
+        const itemLeft = item.offsetLeft;
+        const itemCenter = itemLeft + item.offsetWidth / 2;
+        const dist = Math.abs(centerX - itemCenter);
+        if (dist < minDist) { minDist = dist; closest = item; }
+        item.classList.remove('active');
+      });
+      if (closest) closest.classList.add('active');
+    }
+
+    prepare();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel').forEach(car => {
+      initPracticalInfiniteCarousel(car, 20);
+    });
+
+    document.querySelectorAll('.categorie').forEach(link => {
+      if (link.tagName.toLowerCase() === 'a') {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const dest = link.href;
+          document.body.classList.add('fade-out');
+          setTimeout(() => location.href = dest, 380);
+        });
+      }
+    });
+
+    // 👇 Ajout du comportement de disparition au scroll
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        document.body.classList.add('scrolled');
+      } else {
+        document.body.classList.remove('scrolled');
+      }
+    });
   });
-});
-</script>
+  </script>
 
 </body>
 </html>
