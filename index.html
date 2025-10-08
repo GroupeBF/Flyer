@@ -73,10 +73,13 @@
     /* CARROUSEL */
 .carousel {
   width: 95%;
+  margin: 0 auto; 
   display: flex;
   justify-content: center;
   gap: 10px;
   padding: 5px;
+  flex: 0 0 50px; /* largeur fixe de 200px, pas de flex-grow ni shrink */
+  height: 150px; 
   box-sizing: border-box;
   overflow-x: auto;
   scroll-behavior: smooth;
@@ -86,8 +89,6 @@
     .carousel::-webkit-scrollbar{ display:none; }
 
     .categorie {
-      flex: 0 0 50px;
-      height: 100px;
       border-radius:12px;
       overflow:hidden;
       box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
