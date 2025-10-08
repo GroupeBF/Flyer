@@ -1,235 +1,281 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nos Réalisations</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nos Réalisations — Carrousels infinis (pratique)</title>
   <style>
-    @font-face {
-      font-family: 'Engravers';
-      src: url('Police Engravers.ttf') format('truetype');
-    }
-    @font-face {
-      font-family: 'TT Lakes';
-      src: url('Police TTLakes.ttf') format('truetype');
-    }
+    @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
+    @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
 
-    body {
-      font-family: 'TT Lakes', sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* corps + background (comme chez toi) */
+    body{
+      font-family:'TT Lakes',sans-serif;
+      margin:0; padding:0;
+      text-align:center;
+      color:white;
       background-image: url('Photo outil-plaquette-carbure-brase.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-      color: white;
-      min-height: 100vh;
-      overflow-y: scroll;
+      min-height:100vh;
+      overflow-y: auto;
     }
 
     .title {
-      position: fixed;
-      top: 10px;
-      font-family: 'Engravers', sans-serif;
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-      background-color: rgba(227, 6, 19, 1);
-      width: 100vw;
-      padding: 8px 0;
-      animation: pulsate 1s ease-in-out infinite;
-      z-index: 10;
+      position: fixed; top:10px; left:0;
+      width:100vw; padding:8px 0;
+      font-family:'Engravers'; font-size:20px;
+      background: rgba(227,6,19,1); z-index:20; font-weight:bold;
     }
 
     .logo-container {
-      position: fixed;
-      bottom: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgb(150, 150, 150);
-      border-radius: 15px;
-      max-width: 400px;
-      width: 95%;
-      display: inline-block;
-      z-index: 10;
+      position: fixed; bottom:10px; left:50%;
+      transform: translateX(-50%);
+      z-index:20;
+      background: rgba(255,255,255,0.85);
+      border-radius:15px; padding:6px; max-width:400px; width:92%;
+      border:1px solid rgba(0,0,0,0.12);
     }
 
-    #logoBF {
-      width: 100%;
-      height: auto;
-      max-width: 400px;
-    }
+    #logoBF{ width:100%; height:auto; display:block; }
 
-    .content {
-      margin-top: 80px;
-      margin-bottom: 250px;
-      width: 100%;
-    }
+    .content { padding-top:80px; padding-bottom:200px; }
 
-    .section {
-      margin: 40px 0;
-    }
+    .section { margin: 36px 0; }
 
     .section h2 {
-      font-family: 'Engravers', sans-serif;
-      background-color: rgba(0, 0, 0, 0.6);
-      display: inline-block;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
+      font-family:'Engravers'; display:inline-block;
+      background: rgba(0,0,0,0.5); padding:8px 14px; border-radius:8px;
+      margin-bottom:12px;
     }
 
+    /* CARROUSEL */
     .carousel {
-      display: flex;
-      gap: 15px;
-      overflow-x: scroll;
+      width:100%;
+      box-sizing:border-box;
+      padding: 18px 10px;
+      display:flex;
+      gap:18px;
+      overflow-x: auto;
       scroll-behavior: smooth;
-      padding: 20px;
-      width: 100%;
-      box-sizing: border-box;
-      justify-content: start;
-      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
-
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
+    .carousel::-webkit-scrollbar{ display:none; }
 
     .categorie {
-      position: relative;
-      flex: 0 0 250px;
+      flex: 0 0 260px;
       aspect-ratio: 1 / 1.3;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
+      transform: scale(0.92);
       opacity: 0.6;
-      transform: scale(0.9);
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      cursor: pointer;
+      transition: transform 220ms ease, opacity 220ms ease;
       scroll-snap-align: center;
+      background: #222;
+      position: relative;
+      cursor: pointer;
     }
 
-    .categorie.active {
-      transform: scale(1.1);
-      opacity: 1;
-    }
+    .categorie img{ width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
 
-    .categorie img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(80%);
-    }
+    .categorie.active { transform: scale(1.08); opacity: 1; }
 
     .overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: 'Engravers', sans-serif;
-      font-size: 12px;
-      background-color: rgba(0, 0, 0, 0.3);
-      text-align: center;
-      padding: 10px;
-      box-sizing: border-box;
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Engravers'; color:white; text-align:center;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
+      padding:10px; box-sizing:border-box;
     }
 
-    @keyframes pulsate {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
+    /* responsive tweak */
+    @media (max-width:720px){
+      .categorie { flex:0 0 70%; }
     }
   </style>
 </head>
-
 <body>
 
   <h2 class="title">Découvrez nos réalisations</h2>
 
   <div class="content">
 
-    <!-- SECTION AFFÛTAGE -->
     <div class="section">
       <h2>Affûtage</h2>
-      <div class="carousel" id="carousel-affutage">
-        <div class="categorie"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></div>
-        <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></div>
-        <div class="categorie"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></div>
+      <div class="carousel" id="c-affutage">
+        <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
+        <a class="categorie" href="Sous page forets HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
+        <a class="categorie" href="Sous page circulaires.html"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
       </div>
     </div>
 
-    <!-- SECTION FABRICATION -->
     <div class="section">
       <h2>Fabrication</h2>
-      <div class="carousel" id="carousel-fabrication">
-        <div class="categorie"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></div>
-        <div class="categorie"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></div>
+      <div class="carousel" id="c-fabrication">
+        <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
+        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
       </div>
     </div>
 
-    <!-- SECTION FOURNITURE -->
     <div class="section">
       <h2>Fourniture</h2>
-      <div class="carousel" id="carousel-fourniture">
-        <div class="categorie"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></div>
+      <div class="carousel" id="c-fourniture">
+        <a class="categorie" href="Sous page autre HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
       </div>
     </div>
 
   </div>
 
-  <div class="logo-container">
-    <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF">
-  </div>
+  <div class="logo-container"><img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"></div>
 
-  <script>
-  // --- REND LES CARROUSELS INFINIS & FLUIDES ---
-  document.querySelectorAll('.carousel').forEach(carousel => {
-    const items = Array.from(carousel.children);
+<script>
+/*
+  STRATÉGIE :
+  - Pour chaque .carousel on lit les items initiaux (les <a.categorie>).
+  - On clone ces items **jusqu'à ce que la largeur du carousel soit suffisante**
+    (par ex. 8x la largeur visible). Ainsi l'utilisateur peut scroller "longtemps"
+    sans atteindre l'extrémité (pratiquement infini).
+  - On n'effectue **aucun repositionnement visuel** en cours d'utilisation -> pas de sursaut.
+  - On calcule l'élément central via position relative et on lui applique .active (scale/opacity).
+*/
 
-    // On duplique le contenu 2x pour créer une illusion de boucle
-    items.forEach(item => carousel.appendChild(item.cloneNode(true)));
-    items.forEach(item => carousel.appendChild(item.cloneNode(true)));
+function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
+  // get original items array
+  const origItems = Array.from(carousel.querySelectorAll('.categorie'));
+  if (!origItems.length) return;
 
-    // Quand on atteint la fin, on revient au centre sans sursaut
-    carousel.addEventListener('scroll', () => {
-      const scrollLeft = carousel.scrollLeft;
-      const maxScroll = carousel.scrollWidth / 3; // 3 sections identiques
-      if (scrollLeft >= maxScroll * 2) {
-        carousel.scrollLeft = scrollLeft - maxScroll;
-      } else if (scrollLeft < maxScroll / 2) {
-        carousel.scrollLeft = scrollLeft + maxScroll;
-      }
+  // compute one item width after images loaded
+  const ensureReady = () => {
+    // measure: if width 0, wait
+    const rect = origItems[0].getBoundingClientRect();
+    return rect.width > 10;
+  };
 
-      // Mise en avant de l’élément central
-      const center = carousel.getBoundingClientRect().left + carousel.clientWidth / 2;
-      let closest = null;
-      let minDist = Infinity;
+  function prepare() {
+    const visible = carousel.clientWidth || window.innerWidth;
+    // decide how many total children we want so that scrollWidth >= visible * minRepeatFactor
+    const currentWidth = carousel.scrollWidth;
+    const targetWidth = visible * minRepeatFactor;
+    let cloneCount = 0;
 
-      carousel.querySelectorAll('.categorie').forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const itemCenter = rect.left + rect.width / 2;
-        const dist = Math.abs(center - itemCenter);
-        if (dist < minDist) {
-          minDist = dist;
-          closest = item;
-        }
-        item.classList.remove('active');
+    // if already wide enough, do nothing
+    if (currentWidth >= targetWidth) {
+      attachCenterListener();
+      return;
+    }
+
+    // else duplicate sets of original items until we reach targetWidth
+    while (carousel.scrollWidth < targetWidth) {
+      origItems.forEach(it => {
+        const clone = it.cloneNode(true);
+        clone.removeAttribute('id');
+        carousel.appendChild(clone);
       });
-      if (closest) closest.classList.add('active');
-    });
+      cloneCount++;
+      if (cloneCount > 30) break; // safety
+    }
 
-    // Positionne le scroll au centre initialement
-    carousel.scrollLeft = carousel.scrollWidth / 3;
+    // after duplication, ensure we can center initial content nicely by scrolling a bit
+    // scroll a little to allow center highlighting to compute (no jump)
+    requestAnimationFrame(() => {
+      // small positive scroll to avoid 0-left edge
+      if (carousel.scrollLeft === 0) carousel.scrollLeft = 2;
+      attachCenterListener();
+    });
+  }
+
+  function attachCenterListener() {
+    // throttle via rAF
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateActiveCenter();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    carousel.addEventListener('scroll', onScroll, { passive: true });
+    // initial call
+    updateActiveCenter();
+    // also update on resize (since sizes change)
+    window.addEventListener('resize', () => {
+      // debounce small
+      clearTimeout(carousel._resizeTO);
+      carousel._resizeTO = setTimeout(updateActiveCenter, 120);
+    });
+  }
+
+  function updateActiveCenter() {
+    const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
+    let closest = null;
+    let minDist = Number.POSITIVE_INFINITY;
+    // query all current items (original + clones)
+    const items = Array.from(carousel.querySelectorAll('.categorie'));
+    items.forEach(item => {
+      const itemLeft = item.offsetLeft;
+      const itemCenter = itemLeft + item.offsetWidth / 2;
+      const dist = Math.abs(centerX - itemCenter);
+      if (dist < minDist) { minDist = dist; closest = item; }
+      item.classList.remove('active');
+    });
+    if (closest) closest.classList.add('active');
+  }
+
+  // If images not loaded yet, wait a bit
+  if (!ensureReady()) {
+    // try after load or after small timeout
+    window.addEventListener('load', prepare, { once: true });
+    setTimeout(() => {
+      try { prepare(); } catch(e){ /* ignore */ }
+    }, 300);
+  } else {
+    prepare();
+  }
+}
+
+/* Initialize all carousels on the page */
+document.addEventListener('DOMContentLoaded', () => {
+  // keep your fade-in behavior if needed
+  document.body.classList.add('fade-in');
+
+  // init each carousel
+  document.querySelectorAll('.carousel').forEach(car => {
+    initPracticalInfiniteCarousel(car, 8); // 8x visible width -> très long
   });
-  </script>
+
+  // keep original click fade-out behavior for links inside categories
+  document.querySelectorAll('.categorie').forEach(link => {
+    // categories are <a> sometimes; handle anchors and non-anchors
+    const anchor = link.href ? link : link.querySelector('a') || null;
+    if (link.tagName.toLowerCase() === 'a') {
+      link.addEventListener('click', e => {
+        // allow normal click navigation, but keep fade effect
+        e.preventDefault();
+        const dest = link.href;
+        document.body.classList.add('fade-out');
+        setTimeout(() => location.href = dest, 380);
+      });
+    } else {
+      // if internal clickable wrapper contains a link
+      const a = link.querySelector('a');
+      if (a) {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const dest = a.href;
+          document.body.classList.add('fade-out');
+          setTimeout(() => location.href = dest, 380);
+        });
+      }
+    }
+  });
+});
+</script>
 
 </body>
 </html>
