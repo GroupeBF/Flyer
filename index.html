@@ -143,7 +143,7 @@
   - On calcule l'élément central via position relative et on lui applique .active (scale/opacity).
 */
 
-function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
+function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
   // get original items array
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // init each carousel
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 8); // 8x visible width -> très long
+    initPracticalInfiniteCarousel(car, 20); // 20x visible width -> très long
   });
 
   // keep original click fade-out behavior for links inside categories
