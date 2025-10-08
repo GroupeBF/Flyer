@@ -154,16 +154,7 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
     const rect = origItems[0].getBoundingClientRect();
     return rect.width > 10;
   };
-
-  function prepare() {
-    const visible = carousel.clientWidth || window.innerWidth;
-    // decide how many total children we want so that scrollWidth >= visible * minRepeatFactor
-    const currentWidth = carousel.scrollWidth;
-    const targetWidth = visible * minRepeatFactor;
-    let cloneCount = 0;
-
-    // if already wide enough, do nothing
-    if (currentWidth >= targetWidth) {
+     if (currentWidth >= targetWidth) {
       attachCenterListener();
       return;
     }
@@ -239,6 +230,29 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
   }
 }
 
+document.querySelectorAll('.carousel').forEach(carousel => {
+  const marker = document.createElement('div');
+  marker.textContent = '↻';
+  marker.style.position = 'absolute';
+  marker.style.top = '50%';
+  marker.style.right = '10px';
+  marker.style.transform = 'translateY(-50%)';
+  marker.style.fontSize = '28px';
+  marker.style.color = 'rgba(255,255,255,0.4)';
+  marker.style.opacity = '0';
+  marker.style.transition = 'opacity 0.5s';
+  carousel.style.position = 'relative';
+  carousel.appendChild(marker);
+
+  carousel.addEventListener('scroll', () => {
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    if (carousel.scrollLeft > maxScroll * 0.95) {
+      marker.style.opacity = '1';
+      setTimeout(() => (marker.style.opacity = '0'), 1000);
+    }
+  });
+});
+  
 /* Initialize all carousels on the page */
 document.addEventListener('DOMContentLoaded', () => {
   // keep your fade-in behavior if needed
