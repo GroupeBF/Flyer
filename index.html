@@ -22,17 +22,19 @@
       overflow-y: auto;
     }
 
-    .title {
-      top: 20px;
-      margin-bottom: 20px;
-      left:0;
-      width:100%; 
-      font-family:'Engravers'; 
-      font-size:28px;
-      background: rgba(227,6,19,1); 
-      font-weight:bold;
-      animation: pulsate 2s ease-in-out infinite;
-    }
+.title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 0;
+  font-family: 'Engravers';
+  font-size: 28px;
+  background: rgba(227, 6, 19, 1);
+  z-index: 9999;
+  font-weight: bold;
+  animation: pulsate 2s ease-in-out infinite;
+}
 
     .logo-container {
       position: fixed; 
@@ -50,11 +52,12 @@
 
     #logoBF{ width:100%; height:auto; display:block; }
 
-    /* 👉 On ajoute une marge haute suffisante pour que le titre ne chevauche rien */
-    .content { 
-      padding-top:100px; /* espace pour le titre fixe */
-      padding-bottom:200px; 
-    }
+.content {
+  margin-top: 80px; /* hauteur exacte du bandeau rouge */
+  padding-bottom: 200px;
+  position: relative;
+  z-index: 1; /* reste au-dessus du fond mais sous le titre */
+}
 
     .section { margin: 36px 0; }
 
