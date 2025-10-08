@@ -8,7 +8,6 @@
     @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
     @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
 
-    /* corps + background (comme chez toi) */
     body{
       font-family:'TT Lakes',sans-serif;
       margin:0; padding:0;
@@ -71,42 +70,41 @@
     }
 
     /* CARROUSEL */
-.carousel {
-  width: 97.5%;
-  display: flex;
-  margin: 0 auto;
-  justify-content: center;
-  gap: 10px;
-  padding: 5px;
-  box-sizing: border-box;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-    .categorie {
-  flex: 0 0 50px; /* largeur fixe */
-  height: 100px;
-  flex-shrink: 0;
-  width: 240px; /* <-- on ajoute aussi width */
-  box-sizing: border-box;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
-  transform: scale(0.92);
-  opacity: 0.6;
-  transition: transform 220ms ease, opacity 220ms ease;
-  scroll-snap-align: center;
-  background: #222;
-  position: relative;
-  cursor: pointer;
-}
-    
+    .carousel {
+      width: 97.5%;
+      display: flex;
+      margin: 0 auto;
+      justify-content: center;
+      gap: 10px;
+      padding: 5px;
+      box-sizing: border-box;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
     .carousel::-webkit-scrollbar{ display:none; }
 
-    .categorie img{ width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
+    /* BOX FIXE */
+    .categorie {
+      flex: 0 0 240px !important;  /* largeur fixe */
+      width: 240px !important;
+      height: 160px !important;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
+      transform: scale(0.92);
+      opacity: 0.6;
+      transition: transform 220ms ease, opacity 220ms ease;
+      scroll-snap-align: center;
+      background: #222;
+      position: relative;
+      cursor: pointer;
+    }
 
+    .categorie img{ width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.82); }
     .categorie.active { transform: scale(1.08); opacity: 1; }
 
     .overlay {
@@ -123,26 +121,15 @@
       box-sizing:border-box;
     }
 
-    /* responsive tweak */
     @media (max-width:720px){
-      .categorie { flex:0 0 70%; }
+      .categorie { flex:0 0 70%; width:70%; }
     }
 
-    /* Animation de pulsation */
-@keyframes pulsate {
-    0% {
-        transform: scale(1); /* Taille normale du texte */
-        opacity: 1; /* Opacité normale */
+    @keyframes pulsate {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); opacity: 1; }
     }
-    50% {
-        transform: scale(1.03); /* Agrandir légèrement le texte */
-    }
-    100% {
-        transform: scale(1); /* Retour à la taille normale */
-        opacity: 1; /* Opacité normale */
-    }
-}
-    
   </style>
 </head>
 <body>
@@ -150,7 +137,6 @@
   <h2 class="title">Découvrez nos réalisations</h2>
 
   <div class="content">
-
     <div class="section">
       <h2>Affûtage</h2>
       <div class="carousel" id="c-affutage">
@@ -174,67 +160,40 @@
         <a class="categorie" href="Sous page autre HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
       </div>
     </div>
-
   </div>
 
   <div class="logo-container"><img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF"></div>
 
 <script>
-/*
-  STRATÉGIE :
-  - Pour chaque .carousel on lit les items initiaux (les <a.categorie>).
-  - On clone ces items **jusqu'à ce que la largeur du carousel soit suffisante**
-    (par ex. 8x la largeur visible). Ainsi l'utilisateur peut scroller "longtemps"
-    sans atteindre l'extrémité (pratiquement infini).
-  - On n'effectue **aucun repositionnement visuel** en cours d'utilisation -> pas de sursaut.
-  - On calcule l'élément central via position relative et on lui applique .active (scale/opacity).
-*/
-
 function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
-  // get original items array
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
 
-  // compute one item width after images loaded
-  const ensureReady = () => {
-      return true;
-  };
-
   function prepare() {
     const visible = carousel.clientWidth || window.innerWidth;
-    // decide how many total children we want so that scrollWidth >= visible * minRepeatFactor
-    const currentWidth = carousel.scrollWidth;
     const targetWidth = visible * minRepeatFactor;
-    let cloneCount = 0;
 
-    // if already wide enough, do nothing
-    if (currentWidth >= targetWidth) {
-      attachCenterListener();
-      return;
-    }
+    // Appliquer largeur fixe aux originaux
+    origItems.forEach(it => {
+      it.style.flex = '0 0 240px';
+      it.style.width = '240px';
+    });
 
-    // else duplicate sets of original items until we reach targetWidth
+    // Clonage infini
     while (carousel.scrollWidth < targetWidth) {
       origItems.forEach(it => {
         const clone = it.cloneNode(true);
         clone.removeAttribute('id');
+        clone.style.flex = '0 0 240px';
+        clone.style.width = '240px';
         carousel.appendChild(clone);
       });
-      cloneCount++;
-      if (cloneCount > 30) break; // safety
     }
 
-    // after duplication, ensure we can center initial content nicely by scrolling a bit
-    // scroll a little to allow center highlighting to compute (no jump)
-    requestAnimationFrame(() => {
-      // small positive scroll to avoid 0-left edge
-      if (carousel.scrollLeft === 0) carousel.scrollLeft = 2;
-      attachCenterListener();
-    });
+    attachCenterListener();
   }
 
   function attachCenterListener() {
-    // throttle via rAF
     let ticking = false;
     function onScroll() {
       if (!ticking) {
@@ -246,11 +205,8 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
       }
     }
     carousel.addEventListener('scroll', onScroll, { passive: true });
-    // initial call
     updateActiveCenter();
-    // also update on resize (since sizes change)
     window.addEventListener('resize', () => {
-      // debounce small
       clearTimeout(carousel._resizeTO);
       carousel._resizeTO = setTimeout(updateActiveCenter, 120);
     });
@@ -259,8 +215,7 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
   function updateActiveCenter() {
     const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
     let closest = null;
-    let minDist = Number.POSITIVE_INFINITY;
-    // query all current items (original + clones)
+    let minDist = Infinity;
     const items = Array.from(carousel.querySelectorAll('.categorie'));
     items.forEach(item => {
       const itemLeft = item.offsetLeft;
@@ -272,51 +227,23 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
     if (closest) closest.classList.add('active');
   }
 
-  // If images not loaded yet, wait a bit
-  if (!ensureReady()) {
-    // try after load or after small timeout
-    window.addEventListener('load', prepare, { once: true });
-    setTimeout(() => {
-      try { prepare(); } catch(e){ /* ignore */ }
-    }, 300);
-  } else {
-    prepare();
-  }
+  // préparation directe
+  prepare();
 }
 
-/* Initialize all carousels on the page */
 document.addEventListener('DOMContentLoaded', () => {
-  // keep your fade-in behavior if needed
-  document.body.classList.add('fade-in');
-
-  // init each carousel
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 20); // 20x visible width -> très long
+    initPracticalInfiniteCarousel(car, 20);
   });
 
-  // keep original click fade-out behavior for links inside categories
   document.querySelectorAll('.categorie').forEach(link => {
-    // categories are <a> sometimes; handle anchors and non-anchors
-    const anchor = link.href ? link : link.querySelector('a') || null;
     if (link.tagName.toLowerCase() === 'a') {
       link.addEventListener('click', e => {
-        // allow normal click navigation, but keep fade effect
         e.preventDefault();
         const dest = link.href;
         document.body.classList.add('fade-out');
         setTimeout(() => location.href = dest, 380);
       });
-    } else {
-      // if internal clickable wrapper contains a link
-      const a = link.querySelector('a');
-      if (a) {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          const dest = a.href;
-          document.body.classList.add('fade-out');
-          setTimeout(() => location.href = dest, 380);
-        });
-      }
     }
   });
 });
