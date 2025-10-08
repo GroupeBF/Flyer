@@ -230,29 +230,6 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 8) {
   }
 }
 
-document.querySelectorAll('.carousel').forEach(carousel => {
-  const marker = document.createElement('div');
-  marker.textContent = '↻';
-  marker.style.position = 'absolute';
-  marker.style.top = '50%';
-  marker.style.right = '10px';
-  marker.style.transform = 'translateY(-50%)';
-  marker.style.fontSize = '28px';
-  marker.style.color = 'rgba(255,255,255,0.4)';
-  marker.style.opacity = '0';
-  marker.style.transition = 'opacity 0.5s';
-  carousel.style.position = 'relative';
-  carousel.appendChild(marker);
-
-  carousel.addEventListener('scroll', () => {
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-    if (carousel.scrollLeft > maxScroll * 0.95) {
-      marker.style.opacity = '1';
-      setTimeout(() => (marker.style.opacity = '0'), 1000);
-    }
-  });
-});
-  
 /* Initialize all carousels on the page */
 document.addEventListener('DOMContentLoaded', () => {
   // keep your fade-in behavior if needed
@@ -260,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // init each carousel
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 8); // 8x visible width -> très long
+    initPracticalInfiniteCarousel(car, 15); // 15x visible width -> très long
   });
 
   // keep original click fade-out behavior for links inside categories
