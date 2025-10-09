@@ -1,144 +1,272 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nos Réalisations</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nos Réalisations — Carrousels infinis (corrigé)</title>
+
   <style>
-    /* --- Style global --- */
+    @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
+    @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
+
     body {
+      font-family: 'TT Lakes', sans-serif;
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      overflow-x: hidden;
-      background: url('ton_background.jpg') no-repeat center center fixed;
+      padding: 0;
+      text-align: center;
+      color: white;
+      background-image: url('Photo outil-plaquette-carbure-brase.jpg');
       background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      overflow-y: auto;
     }
 
-    /* --- Bandeau fixe rouge --- */
-    header {
+    /* TITRE FIXE TOUJOURS DEVANT */
+    .title {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      background-color: #c00;
-      color: white;
-      font-weight: 700;
-      font-size: 1.5rem;
-      text-align: center;
-      padding: 20px 0;
-      z-index: 1000;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      padding: 12px 0;
+      font-family: 'Engravers';
+      font-size: 28px;
+      background: rgba(227, 6, 19, 1);
+      z-index: 9999; /* très haut pour rester visible */
+      font-weight: bold;
+      animation: pulsate 2s ease-in-out infinite;
     }
 
-    /* --- Conteneur qui masque le haut du scroll --- */
-    .content-wrapper {
+    /* LOGO EN BAS DE PAGE */
+    .logo-container {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      padding: 6px;
+      max-width: 400px;
+      width: 92%;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    #logoBF { width: 100%; height: auto; display: block; }
+
+    /* DÉCALAGE SOUS LE TITRE POUR ÉVITER LE CHEVAUCHEMENT */
+    .content {
+      margin-top: 80px; /* espace sous le bandeau rouge */
+      padding-bottom: 200px;
       position: relative;
-      overflow: hidden;     /* masque ce qui passe derrière le header */
-      margin-top: 80px;     /* hauteur du bandeau */
       z-index: 1;
     }
 
-    /* --- Zone défilante principale --- */
-    .content {
-      position: relative;
-      z-index: 0;
-      padding: 20px;
-      overflow-y: auto;
-      min-height: 100vh;
-    }
+    .section { margin: 36px 0; margin-top: 20px; margin-bottom: 20px; }
 
-    /* --- Titres de section --- */
-    h2 {
-      color: #000;
-      text-transform: uppercase;
-      background-color: rgba(255, 255, 255, 0.6);
-      display: inline-block;
-      padding: 5px 15px;
-      border-radius: 10px;
-      margin: 30px 0 10px 10px;
-      font-size: 1.2rem;
-    }
-
-    /* --- Carrousel horizontal --- */
-    .carousel {
+    .section h2 {
+      font-family: 'Engravers';
+      font-size: 25px;
+      color: black;
       display: flex;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 0px 16px;
+      border-radius: 8px;
+      left: 10px;
+      margin-bottom: 5px;
+    }
+
+    /* CARROUSEL */
+    .carousel {
+      width: 97.5%;
+      display: flex;
+      margin: 0 auto;
+      justify-content: flex-start;
+      gap: 10px;
+      padding: 5px 5px 5px 15px; /* marge gauche ajoutée */
+      box-sizing: border-box;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 15px;
-      padding: 10px;
       scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
 
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
+    .carousel::-webkit-scrollbar { display: none; }
 
-    /* --- Onglets du carrousel --- */
-    .card {
-      flex: 0 0 150px; /* largeur de l’onglet */
-      height: 220px;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 15px;
+    /* BOX FIXE */
+    .categorie {
+      flex: 0 0 140px !important; /* largeur fixe */
+      width: 140px !important;
+      height: 100px !important;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
+      transform: scale(0.92);
+      opacity: 0.6;
+      transition: transform 220ms ease, opacity 220ms ease;
+      scroll-snap-align: center;
+      background: #222;
       position: relative;
-      scroll-snap-align: start;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+      cursor: pointer;
     }
 
-    .card:hover {
-      transform: scale(1.05);
-    }
-
-    .card img {
+    .categorie img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.8;
+      display: block;
+      filter: brightness(.82);
     }
 
-    .card span {
+    .categorie.active { transform: scale(1.08); opacity: 1; }
+
+    .overlay {
       position: absolute;
-      bottom: 10px;
-      left: 0;
-      width: 100%;
-      text-align: center;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Engravers';
       color: white;
-      font-weight: bold;
-      text-shadow: 0 0 5px black;
-      font-size: 1rem;
+      text-align: center;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 720px) {
+      .categorie { flex: 0 0 70%; width: 70%; }
+    }
+
+    @keyframes pulsate {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 
 <body>
-  <header>Découvrez nos réalisations</header>
 
-  <div class="content-wrapper">
-    <div class="content">
-      <section>
-        <h2>Fabrication</h2>
-        <div class="carousel">
-          <div class="card"><img src="image1.jpg" alt=""><span>Fraises HSS</span></div>
-          <div class="card"><img src="image2.jpg" alt=""><span>Forêts HSS</span></div>
-          <div class="card"><img src="image3.jpg" alt=""><span>Fraises carbure</span></div>
-          <div class="card"><img src="image4.jpg" alt=""><span>Forêts carbure</span></div>
-          <div class="card"><img src="image5.jpg" alt=""><span>Alésoirs</span></div>
-          <div class="card"><img src="image6.jpg" alt=""><span>Scies</span></div>
-        </div>
-      </section>
+  <h2 class="title">Découvrez nos réalisations</h2>
 
-      <section>
-        <h2>Fourniture</h2>
-        <div class="carousel">
-          <div class="card"><img src="image7.jpg" alt=""><span>Forets standards</span></div>
-          <div class="card"><img src="image8.jpg" alt=""><span>Fraises standards</span></div>
-          <div class="card"><img src="image9.jpg" alt=""><span>Outils spéciaux</span></div>
-          <div class="card"><img src="image10.jpg" alt=""><span>Porte-outils</span></div>
-        </div>
-      </section>
+  <div class="content">
+    <div class="section">
+      <h2>Affûtage</h2>
+      <div class="carousel" id="c-affutage">
+        <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
+        <a class="categorie" href="Sous page forets HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
+        <a class="categorie" href="Sous page circulaires.html"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Fabrication</h2>
+      <div class="carousel" id="c-fabrication">
+        <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
+        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Fourniture</h2>
+      <div class="carousel" id="c-fourniture">
+        <a class="categorie" href="Sous page autre HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
+      </div>
     </div>
   </div>
+
+  <div class="logo-container">
+    <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF">
+  </div>
+
+  <script>
+  function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
+    const origItems = Array.from(carousel.querySelectorAll('.categorie'));
+    if (!origItems.length) return;
+
+    function prepare() {
+      const visible = carousel.clientWidth || window.innerWidth;
+      const targetWidth = visible * minRepeatFactor;
+
+      // Largeur fixe pour chaque item
+      origItems.forEach(it => {
+        it.style.flex = '0 0 240px';
+        it.style.width = '240px';
+      });
+
+      // Clonage infini
+      while (carousel.scrollWidth < targetWidth) {
+        origItems.forEach(it => {
+          const clone = it.cloneNode(true);
+          clone.removeAttribute('id');
+          clone.style.flex = '0 0 240px';
+          clone.style.width = '240px';
+          carousel.appendChild(clone);
+        });
+      }
+
+      attachCenterListener();
+    }
+
+    function attachCenterListener() {
+      let ticking = false;
+      function onScroll() {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateActiveCenter();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+      carousel.addEventListener('scroll', onScroll, { passive: true });
+      updateActiveCenter();
+      window.addEventListener('resize', () => {
+        clearTimeout(carousel._resizeTO);
+        carousel._resizeTO = setTimeout(updateActiveCenter, 120);
+      });
+    }
+
+    function updateActiveCenter() {
+      const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
+      let closest = null;
+      let minDist = Infinity;
+      const items = Array.from(carousel.querySelectorAll('.categorie'));
+      items.forEach(item => {
+        const itemLeft = item.offsetLeft;
+        const itemCenter = itemLeft + item.offsetWidth / 2;
+        const dist = Math.abs(centerX - itemCenter);
+        if (dist < minDist) { minDist = dist; closest = item; }
+        item.classList.remove('active');
+      });
+      if (closest) closest.classList.add('active');
+    }
+
+    prepare();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.carousel').forEach(car => {
+      initPracticalInfiniteCarousel(car, 20);
+    });
+
+    document.querySelectorAll('.categorie').forEach(link => {
+      if (link.tagName.toLowerCase() === 'a') {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const dest = link.href;
+          document.body.classList.add('fade-out');
+          setTimeout(() => location.href = dest, 380);
+        });
+      }
+    });
+  });
+  </script>
+
 </body>
 </html>
