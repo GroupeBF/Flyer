@@ -34,7 +34,7 @@
       font-family: 'Engravers';
       font-size: 28px;
       background: rgba(227, 6, 19, 1);
-      z-index: 9999; /* très haut pour rester visible */
+      z-index: 9999;
       font-weight: bold;
       animation: pulsate 2s ease-in-out infinite;
     }
@@ -56,19 +56,20 @@
 
     #logoBF { width: 100%; height: auto; display: block; }
 
-    /* ********* NOUVEAU : WRAPPER QUI MASQUE LE HAUT SOUS LE TITRE ********* */
-    .content-wrapper {
-      position: relative;
-      overflow: hidden;    /* <= masque tout ce qui dépasse par le haut */
-      margin-top: 80px;    /* correspond à la hauteur du bandeau (top area) */
+    /* 👇 Ce conteneur masque tout ce qui dépasse du haut sous 80px */
+    .content-mask {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      bottom: 0;
+      overflow: hidden; /* cache tout ce qui dépasse */
       z-index: 1;
     }
 
-    /* DÉCALAGE SOUS LE TITRE POUR ÉVITER LE CHEVAUCHEMENT
-       (la logique top:100px a été remplacée par le wrapper ci-dessus) */
     .content {
-      padding-bottom: 200px;
       position: relative;
+      padding-bottom: 200px;
       z-index: 1;
     }
 
@@ -86,14 +87,13 @@
       margin-bottom: 0px;
     }
 
-    /* CARROUSEL */
     .carousel {
       width: 97.5%;
       display: flex;
       margin: 0 auto;
       justify-content: flex-start;
       gap: 10px;
-      padding: 5px 5px 5px 5px; /* marge gauche ajoutée */
+      padding: 5px;
       box-sizing: border-box;
       overflow-x: auto;
       scroll-behavior: smooth;
@@ -103,9 +103,8 @@
 
     .carousel::-webkit-scrollbar { display: none; }
 
-    /* BOX FIXE */
     .categorie {
-      flex: 0 0 140px !important; /* largeur fixe */
+      flex: 0 0 140px !important;
       width: 140px !important;
       height: 200px !important;
       flex-shrink: 0;
@@ -162,35 +161,34 @@
 
   <h2 class="title">Découvrez nos réalisations</h2>
 
-  <!-- WRAPPER AJOUTÉ ICI : tout ce qui dépasse vers le haut sera masqué -->
-  <div class="content-wrapper">
+  <!-- ✅ Conteneur qui masque tout au-dessus de 80px -->
+  <div class="content-mask">
     <div class="content">
       <div class="section">
         <h2>Affûtage</h2>
         <div class="carousel" id="c-affutage">
-          <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
-          <a class="categorie" href="Sous page forets HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
-          <a class="categorie" href="Sous page circulaires.html"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
+          <a class="categorie" href="#"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
+          <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
+          <a class="categorie" href="#"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
         </div>
       </div>
 
       <div class="section">
         <h2>Fabrication</h2>
         <div class="carousel" id="c-fabrication">
-          <a class="categorie" href="Sous page fraises carbure.html"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
-          <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
+          <a class="categorie" href="#"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
+          <a class="categorie" href="#"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
         </div>
       </div>
 
       <div class="section">
         <h2>Fourniture</h2>
         <div class="carousel" id="c-fourniture">
-          <a class="categorie" href="Sous page autre HSS.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
+          <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
         </div>
       </div>
     </div>
   </div>
-  <!-- FIN WRAPPER -->
 
   <div class="logo-container">
     <img id="logoBF" src="Photo Logo BFOSP.png" alt="Logo BF">
@@ -205,7 +203,6 @@
       const visible = carousel.clientWidth || window.innerWidth;
       const targetWidth = visible * minRepeatFactor;
 
-      // Clonage infini (on conserve les styles d'origine)
       while (carousel.scrollWidth < targetWidth) {
         origItems.forEach(it => {
           const clone = it.cloneNode(true);
@@ -213,7 +210,6 @@
           carousel.appendChild(clone);
         });
       }
-
       attachCenterListener();
     }
 
@@ -237,7 +233,7 @@
     }
 
     function updateActiveCenter() {
-      const centerX = carousel.scrollLeft + carousel.clientWidth / 4;
+      const centerX = carousel.scrollLeft + carousel.clientWidth / 3;
       let closest = null;
       let minDist = Infinity;
       const items = Array.from(carousel.querySelectorAll('.categorie'));
@@ -251,7 +247,6 @@
       if (closest) closest.classList.add('active');
     }
 
-    // attendre que les images aient une taille stable
     if (document.readyState === 'loading') {
       window.addEventListener('load', prepare, { once: true });
       setTimeout(prepare, 300);
@@ -264,19 +259,7 @@
     document.querySelectorAll('.carousel').forEach(car => {
       initPracticalInfiniteCarousel(car, 20);
     });
-
-    document.querySelectorAll('.categorie').forEach(link => {
-      if (link.tagName.toLowerCase() === 'a') {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          const dest = link.href;
-          document.body.classList.add('fade-out');
-          setTimeout(() => location.href = dest, 380);
-        });
-      }
-    });
   });
   </script>
-
 </body>
 </html>
