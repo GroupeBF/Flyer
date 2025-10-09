@@ -237,7 +237,7 @@
     }
 
     function updateActiveCenter() {
-      const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
+      const centerX = carousel.scrollLeft + carousel.clientWidth / 4;
       let closest = null;
       let minDist = Infinity;
       const items = Array.from(carousel.querySelectorAll('.categorie'));
