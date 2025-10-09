@@ -39,6 +39,18 @@
       animation: pulsate 2s ease-in-out infinite;
     }
 
+    /* MASQUE : bloque ce qui dépasse au-dessus du titre */
+    .mask-zone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 80px;
+      width: 100%;
+      background: rgba(227, 6, 19, 1); /* même couleur que le titre */
+      z-index: 1000;
+      pointer-events: none; /* permet le scroll normal */
+    }
+
     /* LOGO EN BAS DE PAGE */
     .logo-container {
       position: fixed;
@@ -56,20 +68,11 @@
 
     #logoBF { width: 100%; height: auto; display: block; }
 
-    /* 👇 Ce conteneur masque tout ce qui dépasse du haut sous 80px */
-    .content-mask {
-      position: fixed;
-      top: 80px;
-      left: 0;
-      width: 100%;
-      bottom: 0;
-      overflow: hidden; /* cache tout ce qui dépasse */
-      z-index: 1;
-    }
-
+    /* CONTENU SCROLLABLE */
     .content {
-      position: relative;
+      margin-top: 100px; /* espace sous le titre */
       padding-bottom: 200px;
+      position: relative;
       z-index: 1;
     }
 
@@ -160,32 +163,30 @@
 <body>
 
   <h2 class="title">Découvrez nos réalisations</h2>
+  <div class="mask-zone"></div>
 
-  <!-- ✅ Conteneur qui masque tout au-dessus de 80px -->
-  <div class="content-mask">
-    <div class="content">
-      <div class="section">
-        <h2>Affûtage</h2>
-        <div class="carousel" id="c-affutage">
-          <a class="categorie" href="#"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
-          <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
-          <a class="categorie" href="#"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
-        </div>
+  <div class="content">
+    <div class="section">
+      <h2>Affûtage</h2>
+      <div class="carousel" id="c-affutage">
+        <a class="categorie" href="#"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
+        <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
+        <a class="categorie" href="#"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
       </div>
+    </div>
 
-      <div class="section">
-        <h2>Fabrication</h2>
-        <div class="carousel" id="c-fabrication">
-          <a class="categorie" href="#"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
-          <a class="categorie" href="#"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
-        </div>
+    <div class="section">
+      <h2>Fabrication</h2>
+      <div class="carousel" id="c-fabrication">
+        <a class="categorie" href="#"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
+        <a class="categorie" href="#"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
       </div>
+    </div>
 
-      <div class="section">
-        <h2>Fourniture</h2>
-        <div class="carousel" id="c-fourniture">
-          <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
-        </div>
+    <div class="section">
+      <h2>Fourniture</h2>
+      <div class="carousel" id="c-fourniture">
+        <a class="categorie" href="#"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
       </div>
     </div>
   </div>
@@ -261,5 +262,6 @@
     });
   });
   </script>
+
 </body>
 </html>
