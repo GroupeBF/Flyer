@@ -36,14 +36,14 @@
 
     /* MASQUE : bloque ce qui dépasse au-dessus du titre */
     .mask-zone {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 80px;         /* hauteur correspondant à ton titre */
-        width: 100%;
-        z-index: 9998;        /* juste sous le titre */
-        pointer-events: none;
-        background: linear-gradient(to bottom, rgba(255,255,255, 1), rgba(255,255,255,0.7));
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 80px;
+      width: 100%;
+      background: rgba(227, 6, 19, 1); /* même couleur que le titre */
+      z-index: 1000;
+      pointer-events: none; /* permet le scroll normal */
     }
 
     /* LOGO EN BAS DE PAGE */
@@ -186,6 +186,8 @@
     </div>
   </div>
 
+
+
   <script>
   function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
     const origItems = Array.from(carousel.querySelectorAll('.categorie'));
@@ -225,7 +227,7 @@
     }
 
     function updateActiveCenter() {
-      const centerX = carousel.scrollLeft + carousel.clientWidth / 3;
+      const centerX = carousel.scrollLeft + carousel.clientWidth / 2;
       let closest = null;
       let minDist = Infinity;
       const items = Array.from(carousel.querySelectorAll('.categorie'));
