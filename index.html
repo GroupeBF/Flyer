@@ -20,26 +20,27 @@
       overflow-y: auto;
     }
 
-    /* 🔳 LOGO FIXE EN HAUT À GAUCHE */
-.logo-fixed {
-  position: relative;
-  top: 0;
-  left: 25%;
-  width: 100%;          /* ✅ plus fiable que 100vw */
-  height: 120px;        /* tu peux ajuster cette valeur */
-  background-color: black;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-.logo-fixed img {
-  width: 250px;       /* ✅ fixe la taille du logo */
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
-}
+    /* 🖼️ LOGO FIXE EN HAUT À GAUCHE — SANS FOND NI DÉGRADÉ */
+    .logo-fixed {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 160px;
+      height: auto;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: none; /* ✅ suppression du fond noir */
+    }
+
+    .logo-fixed img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(0,0,0,0.4)); /* petit relief léger */
+    }
 
     /* BANDEAU SLIDESHOW */
     .slideshow-container {
@@ -47,7 +48,7 @@
       width: 100%;
       height: 300px;
       overflow: hidden;
-      margin-top: 0; /* plus besoin d’espace pour le titre */
+      margin-top: 0;
       z-index: 5;
     }
 
@@ -78,7 +79,7 @@
 
     /* CONTENU */
     .content {
-      margin-top: 15px; 
+      margin-top: 15px;
       padding-bottom: 50px;
       position: relative;
       z-index: 1;
@@ -173,7 +174,7 @@
     #logoBF { width: 100%; height: auto; display: block; }
 
     @media (max-width: 720px) {
-      .logo-fixed { width: 110px; height: 110px; }
+      .logo-fixed { width: 110px; height: auto; }
       .categorie { flex: 0 0 70%; width: 70%; }
     }
   </style>
@@ -181,9 +182,9 @@
 
 <body>
 
-  <!-- 🏷️ Logo fixe en haut à gauche -->
+  <!-- 🏷️ Logo fixe en haut à gauche (sans fond ni dégradé) -->
   <div class="logo-fixed">
-    <img src="Photo logo groupe.png" alt="Logo Groupe">
+    <img src="Logo groupe.png" alt="Logo Groupe">
   </div>
 
   <!-- 🖼️ Slideshow -->
