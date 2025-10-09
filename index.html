@@ -20,19 +20,26 @@
       overflow-y: auto;
     }
 
-    /* TITRE FIXE */
-    .title {
+    /* 🔳 LOGO FIXE EN HAUT À GAUCHE */
+    .logo-fixed {
       position: fixed;
       top: 0;
       left: 0;
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(135deg, black 70%, rgba(0,0,0,0) 100%);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .logo-fixed img {
       width: 100%;
-      padding: 10px 0;
-      font-family: 'Engravers';
-      font-size: 28px;
-      background: rgba(227, 6, 19, 1);
-      z-index: 9999;
-      font-weight: bold;
-      animation: pulsate 2s ease-in-out infinite;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
     }
 
     /* BANDEAU SLIDESHOW */
@@ -41,7 +48,7 @@
       width: 100%;
       height: 300px;
       overflow: hidden;
-      margin-top: 70px; /* pour laisser place au titre fixe */
+      margin-top: 0; /* plus besoin d’espace pour le titre */
       z-index: 5;
     }
 
@@ -72,7 +79,7 @@
 
     /* CONTENU */
     .content {
-      margin-top: 15px; /* espace sous le titre + slideshow */
+      margin-top: 15px; 
       padding-bottom: 50px;
       position: relative;
       z-index: 1;
@@ -167,22 +174,20 @@
     #logoBF { width: 100%; height: auto; display: block; }
 
     @media (max-width: 720px) {
+      .logo-fixed { width: 110px; height: 110px; }
       .categorie { flex: 0 0 70%; width: 70%; }
-    }
-
-    @keyframes pulsate {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 
 <body>
 
-  <h2 class="title">Découvrez nos réalisations</h2>
+  <!-- 🏷️ Logo fixe en haut à gauche -->
+  <div class="logo-fixed">
+    <img src="Photo logo groupe.png" alt="Logo Groupe">
+  </div>
 
-  <!-- 🖼️ Slideshow entre le titre et le contenu -->
+  <!-- 🖼️ Slideshow -->
   <div class="slideshow-container" id="slideshow">
     <div class="slideshow-gradient"></div>
   </div>
@@ -213,7 +218,6 @@
     </div>
   </div>
 
-
   <script>
   // 🔄 Chargement du diaporama depuis Google Sheets
   const url = `https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=A%20l'affiche`;
@@ -227,12 +231,11 @@
 
       rows.forEach((row, i) => {
         const img = document.createElement("img");
-        img.src = row.c[0].v; // Colonne A = lien image
+        img.src = row.c[0].v; 
         if (i === 0) img.classList.add("active");
         slideshow.appendChild(img);
       });
 
-      // Transition automatique toutes les 5s
       let current = 0;
       const images = slideshow.querySelectorAll("img");
       setInterval(() => {
@@ -242,7 +245,6 @@
       }, 5000);
     });
 
-  // Ton carrousel d'origine (inchangé)
   function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
     const origItems = Array.from(carousel.querySelectorAll('.categorie'));
     if (!origItems.length) return;
@@ -309,6 +311,5 @@
     });
   });
   </script>
-
 </body>
 </html>
