@@ -35,18 +35,6 @@
       animation: pulsate 2s ease-in-out infinite;
     }
 
-    /* MASQUE : bloque ce qui dépasse au-dessus du titre */
-    .mask-zone {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 50px;
-      width: 100%;
-      background: rgba(227, 6, 19, 1); /* même couleur que le titre */
-      z-index: 1000;
-      pointer-events: none; /* permet le scroll normal */
-    }
-
     /* LOGO EN BAS DE PAGE */
     .logo-container {
       position: fixed;
@@ -158,7 +146,6 @@
 <body>
 
   <h2 class="title">Découvrez nos réalisations</h2>
-  <div class="mask-zone"></div>
 
   <div class="content">
     <div class="section">
