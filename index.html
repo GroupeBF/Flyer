@@ -25,22 +25,22 @@
   position: fixed;
   top: 0;
   left: 0;
-  padding: 10px;
+  width: 100vw;       /* prend toute la largeur de la fenêtre */
+  height: 120px;      /* hauteur de la box */
   background-color: black;
-  width: 100vw;
-  height: 500px; /* <-- taille de ta box */
-  z-index: 9999;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
-    .logo-fixed img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
-    }
+.logo-fixed img {
+  width: 250px;       /* ✅ fixe la taille du logo */
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+}
 
     /* BANDEAU SLIDESHOW */
     .slideshow-container {
