@@ -25,8 +25,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;       /* prend toute la largeur de la fenêtre */
-  height: 120px;      /* hauteur de la box */
+  right: 0;             /* ✅ garantit que la largeur s'étend jusqu'à la droite */
+  width: 100%;          /* ✅ plus fiable que 100vw */
+  height: 120px;        /* tu peux ajuster cette valeur */
   background-color: black;
   z-index: 10000;
   display: flex;
@@ -34,7 +35,6 @@
   justify-content: center;
   padding: 0;
 }
-
 .logo-fixed img {
   width: 250px;       /* ✅ fixe la taille du logo */
   height: auto;
