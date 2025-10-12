@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forets carbure</title>
+
   <style>
+    /* --- FONTS --- */
     @font-face {
       font-family: 'Engravers';
       src: url('Police Engravers.ttf') format('truetype');
@@ -14,131 +16,157 @@
       src: url('Police TTLakes.ttf') format('truetype');
     }
 
-    /* --- STRUCTURE GLOBALE --- */
+    /* --- PAGE GLOBALE --- */
     body {
       font-family: 'TT Lakes', sans-serif;
       margin: 0;
       padding: 0;
-      color: white;
-      text-align: center;
-      background: linear-gradient(180deg, black 0%, rgb(30, 0, 0) 100%);
+      background: radial-gradient(circle at center, #1a0000 0%, black 70%);
       background-attachment: fixed;
       overflow-x: hidden;
+      color: white;
       transition: opacity 0.6s ease-in-out;
       opacity: 0;
     }
+    body.fade-in { opacity: 1; }
 
-    body.fade-in {
-      opacity: 1;
-    }
-
-    /* --- TITRE FIXE --- */
+    /* --- TITRE --- */
     .title {
       position: sticky;
       top: 0;
       z-index: 10;
+      background: linear-gradient(90deg, rgba(227,6,19,1) 0%, rgba(100,0,0,1) 100%);
+      color: #fff;
       font-family: 'Engravers', sans-serif;
       font-size: 30px;
-      color: #fff;
-      background-color: rgba(227, 6, 19, 0.95);
-      padding: 12px 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-      letter-spacing: 1px;
+      font-weight: bold;
+      padding: 15px 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
-    /* --- CONTENU --- */
+    /* --- GALERIE D'IMAGES --- */
     .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      padding: 20px 10px 100px 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 18px;
+      padding: 30px 20px 120px 20px;
+      justify-items: center;
     }
 
     .nouveaute {
-      width: 42%;
-      background-color: rgba(255,255,255,0.05);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
       overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
       cursor: pointer;
+      transform: scale(0.9);
+      transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.4s;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      animation: fadeIn 0.5s ease forwards;
     }
 
     .nouveaute:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 15px rgba(227, 6, 19, 0.6);
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(227, 6, 19, 0.7);
+      background: rgba(255,255,255,0.08);
     }
 
     .nouveaute img {
       width: 100%;
       height: auto;
+      border-bottom: 2px solid rgba(227,6,19,0.8);
       display: block;
     }
 
     .description {
-      font-family: 'TT Lakes', sans-serif;
-      color: white;
-      font-size: 16px;
+      padding: 10px;
       font-weight: bold;
-      margin: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    /* --- ANIMATION D'APPARITION --- */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* --- PLEIN ÉCRAN --- */
     .fullscreen {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.92);
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+      pointer-events: none;
+      transition: opacity 0.4s ease-in-out;
     }
 
     .fullscreen.visible {
       opacity: 1;
+      pointer-events: auto;
     }
 
     .fullscreen img.image {
-      margin-top: 70px;
-      width: 95%;
-      max-width: 600px;
-      border-radius: 10px;
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 14px;
+      box-shadow: 0 0 25px rgba(227,6,19,0.6);
+      animation: zoomIn 0.5s ease;
     }
 
-    .fullscreen p {
-      color: white;
-      font-size: 18px;
-      width: 90%;
-      margin-top: 20px;
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .fullscreen .logo {
       position: absolute;
-      top: 15px;
-      left: 20px;
-      width: 60px;
+      top: 25px;
+      left: 25px;
+      width: 70px;
       height: auto;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+    }
+
+    .fullscreen p {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-size: 17px;
+      width: 85%;
+      line-height: 1.5;
     }
 
     .close-btn {
       position: absolute;
-      top: -5px;
-      right: 20px;
+      top: 10px;
+      right: 25px;
       color: white;
-      font-size: 70px;
+      font-size: 60px;
       cursor: pointer;
       font-weight: bold;
+      transition: transform 0.2s;
     }
+    .close-btn:hover { transform: scale(1.1); }
   </style>
 </head>
+
 <body>
-  <h2 class="title">Démo</h2>
+  <h2 class="title">Forets carbure</h2>
+
   <div class="container" id="nouveautes"></div>
 
-  <div id="fullscreen-view" class="fullscreen" style="display: none;">
+  <div id="fullscreen-view" class="fullscreen">
     <span class="close-btn" onclick="fermerFullscreen()">×</span>
     <img id="fullscreen-logo" class="logo" src="">
     <img id="fullscreen-image" class="image" src="">
@@ -177,7 +205,7 @@
           container.appendChild(div);
         });
       } catch (error) {
-        console.error("Erreur lors du chargement :", error);
+        console.error("Erreur lors du chargement des nouveautés :", error);
       }
     }
 
@@ -191,16 +219,15 @@
       fullscreenCommentaire.textContent = commentaire;
       fullscreenLogo.src = logoIndex == 1 ? logo1 : logoIndex == 2 ? logo2 : "";
 
-      fullscreen.style.display = "flex";
-      requestAnimationFrame(() => fullscreen.classList.add("visible"));
+      fullscreen.classList.add("visible");
     }
 
     function fermerFullscreen() {
       const fs = document.getElementById("fullscreen-view");
       fs.classList.remove("visible");
-      setTimeout(() => (fs.style.display = "none"), 300);
     }
 
+    /* Tracking */
     function recordUserActivity(action, entreprise, nom) {
       const dateOptions = { 
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', 
