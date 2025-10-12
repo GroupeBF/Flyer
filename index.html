@@ -182,9 +182,13 @@
 
     #logoBF { width: 100%; height: auto; display: block; }
 
-    @media (max-width: 720px) {
-      .logo-fixed { width: 110px; height: auto; }
-      .categorie { flex: 0 0 70%; width: 70%; }
+@media (max-width: 720px) {
+  .page-title {
+    font-size: 8vw !important; /* 8% de la largeur de l’écran = s’adapte à la taille du smartphone */
+    line-height: 1.2;
+    white-space: nowrap; /* évite les retours à la ligne */
+  }
+      .nouveaute { transform: scale(0.92); }
     }
   </style>
 </head>
