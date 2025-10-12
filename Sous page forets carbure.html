@@ -173,8 +173,12 @@
     }
     .close-btn:hover { transform: scale(1.1); }
 
-    @media (max-width: 720px) {
-      .page-title { font-size: 40px; }
+@media (max-width: 720px) {
+  .page-title {
+    font-size: 50vw !important; /* 8% de la largeur de l’écran = s’adapte à la taille du smartphone */
+    line-height: 1.2;
+    white-space: nowrap; /* évite les retours à la ligne */
+  }
       .nouveaute { transform: scale(0.92); }
     }
   </style>
