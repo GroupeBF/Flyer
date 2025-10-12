@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nos Réalisations — Carrousels infinis (corrigé)</title>
+  <title>Showroom — Nos Réalisations</title>
 
   <style>
+    /* 🅰️ POLICES PERSONNALISÉES */
     @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
     @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
 
@@ -20,44 +21,43 @@
       overflow-y: auto;
     }
 
-    /* 🖼️ LOGO FIXE EN HAUT À GAUCHE — SANS FOND NI DÉGRADÉ */
+    /* 🧭 EN-TÊTE — FIXE ET ÉLÉGANTE */
     header {
       position: sticky;
       top: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(6px);
-      padding: 0px 20px;
+      padding: 8px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 20;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    header img {
+      width: 130px;
+      height: auto;
+      object-fit: contain;
     }
 
     .page-title {
       font-family: 'Engravers';
       font-size: 50px;
       letter-spacing: 2px;
-      background: linear-gradient(90deg, rgba(227,6,19,1), #ff5555);
+      background: linear-gradient(90deg, rgba(227, 6, 19, 1), #ff5555);
       -webkit-background-clip: text;
-      color: transparent;
+      -webkit-text-fill-color: transparent;
       text-transform: uppercase;
-      
+      margin: 0 auto;
     }
 
-    .header img {
-      width: 150px;
-      height: auto;
-      object-fit: contain;
-    }
-
-    /* BANDEAU SLIDESHOW */
+    /* 🖼️ SLIDESHOW */
     .slideshow-container {
       position: relative;
       width: 100%;
       height: 300px;
       overflow: hidden;
-      margin-top: 0;
       z-index: 5;
     }
 
@@ -72,11 +72,8 @@
       transition: opacity 1.5s ease-in-out;
     }
 
-    .slideshow-container img.active {
-      opacity: 1;
-    }
+    .slideshow-container img.active { opacity: 1; }
 
-    /* Dégradé bas de l’image pour transition douce */
     .slideshow-gradient {
       position: absolute;
       bottom: 0;
@@ -86,7 +83,7 @@
       z-index: 10;
     }
 
-    /* CONTENU */
+    /* 🧩 CONTENU */
     .content {
       margin-top: 15px;
       padding-bottom: 50px;
@@ -94,19 +91,21 @@
       z-index: 1;
     }
 
-    .section { margin: 36px 0; margin-top: 20px; margin-bottom: 20px; }
+    .section {
+      margin: 20px 0;
+    }
 
     .section h2 {
       font-family: 'Engravers';
       font-size: 25px;
       color: white;
-      display: flex;
-      padding: 0px 16px;
+      padding: 0 16px;
       border-radius: 8px;
-      left: 10px;
-      margin-bottom: 0px;
+      margin-bottom: 10px;
+      text-align: left;
     }
 
+    /* 🎠 CARROUSEL */
     .carousel {
       width: 97.5%;
       display: flex;
@@ -114,7 +113,6 @@
       justify-content: flex-start;
       gap: 10px;
       padding: 5px;
-      box-sizing: border-box;
       overflow-x: auto;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
@@ -124,11 +122,9 @@
     .carousel::-webkit-scrollbar { display: none; }
 
     .categorie {
-      flex: 0 0 140px !important;
-      width: 140px !important;
-      height: 200px !important;
-      flex-shrink: 0;
-      box-sizing: border-box;
+      flex: 0 0 140px;
+      width: 140px;
+      height: 200px;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
@@ -146,7 +142,7 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      filter: brightness(.82);
+      filter: brightness(0.82);
     }
 
     .categorie.active { transform: scale(1.08); opacity: 1; }
@@ -159,13 +155,13 @@
       justify-content: center;
       font-family: 'Engravers';
       color: white;
-      text-align: center;
       background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
+      text-align: center;
       padding: 10px;
       box-sizing: border-box;
     }
 
-    /* LOGO BAS FIXE */
+    /* 🧷 LOGO BAS FIXE */
     .logo-container {
       position: fixed;
       bottom: 10px;
@@ -180,57 +176,84 @@
       border: 1px solid rgba(0, 0, 0, 0.12);
     }
 
-    #logoBF { width: 100%; height: auto; display: block; }
+    #logoBF {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
-@media (max-width: 720px) {
-  .page-title {
-    font-size: 8vw !important; /* 8% de la largeur de l’écran = s’adapte à la taille du smartphone */
-    line-height: 1.2;
-    white-space: nowrap; /* évite les retours à la ligne */
-  }
-      .nouveaute { transform: scale(0.92); }
+    /* 📱 RESPONSIVE */
+    @media (max-width: 720px) {
+      header img { width: 100px; }
+      .page-title {
+        font-size: 8vw !important;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+      .section h2 { font-size: 20px; }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- 🔝 EN-TÊTE -->
   <header>
     <img src="Photo logo groupe.png" alt="Logo Groupe">
     <h1 class="page-title">Showroom</h1>
   </header>
 
-  <!-- 🖼️ Slideshow -->
+  <!-- 🖼️ DIAPORAMA -->
   <div class="slideshow-container" id="slideshow">
     <div class="slideshow-gradient"></div>
   </div>
 
+  <!-- 🧩 CONTENU -->
   <div class="content">
     <div class="section">
       <h2>Affûtage</h2>
       <div class="carousel" id="c-affutage">
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo fraise HSS.jpg" alt=""><div class="overlay">Fraises HSS</div></a>
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Forets HSS</div></a>
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo circulaire carbure.jpg" alt=""><div class="overlay">Circulaires</div></a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo fraise HSS.jpg" alt="">
+          <div class="overlay">Fraises HSS</div>
+        </a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo foret facettes HSS.jpg" alt="">
+          <div class="overlay">Forets HSS</div>
+        </a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo circulaire carbure.jpg" alt="">
+          <div class="overlay">Circulaires</div>
+        </a>
       </div>
     </div>
 
     <div class="section">
       <h2>Fabrication</h2>
       <div class="carousel" id="c-fabrication">
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo fraise carbure.jpg" alt=""><div class="overlay">Fraises carbure</div></a>
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes carbure.jpg" alt=""><div class="overlay">Forets carbure</div></a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo fraise carbure.jpg" alt="">
+          <div class="overlay">Fraises carbure</div>
+        </a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo foret facettes carbure.jpg" alt="">
+          <div class="overlay">Forets carbure</div>
+        </a>
       </div>
     </div>
 
     <div class="section">
       <h2>Fourniture</h2>
       <div class="carousel" id="c-fourniture">
-        <a class="categorie" href="Sous page forets carbure.html"><img src="Photo foret facettes HSS.jpg" alt=""><div class="overlay">Autres HSS</div></a>
+        <a class="categorie" href="Sous page forets carbure.html">
+          <img src="Photo foret facettes HSS.jpg" alt="">
+          <div class="overlay">Autres HSS</div>
+        </a>
       </div>
     </div>
   </div>
 
+  <!-- ⚙️ SCRIPT -->
   <script>
   // 🔄 Chargement du diaporama depuis Google Sheets
   const url = `https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=A%20l'affiche`;
@@ -244,7 +267,7 @@
 
       rows.forEach((row, i) => {
         const img = document.createElement("img");
-        img.src = row.c[0].v; 
+        img.src = row.c[0].v;
         if (i === 0) img.classList.add("active");
         slideshow.appendChild(img);
       });
@@ -258,6 +281,7 @@
       }, 5000);
     });
 
+  // ♾️ Carrousel infini
   function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
     const origItems = Array.from(carousel.querySelectorAll('.categorie'));
     if (!origItems.length) return;
