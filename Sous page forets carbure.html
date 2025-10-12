@@ -13,131 +13,128 @@
       font-family: 'TT Lakes';
       src: url('Police TTLakes.ttf') format('truetype');
     }
+
+    /* --- STRUCTURE GLOBALE --- */
     body {
       font-family: 'TT Lakes', sans-serif;
-      text-align: center;
+      margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      background-color: black;
-      transition: opacity 0.5s ease-in-out;
-      height: 100vh;
-      height: 100dvh;
-    }
-
-    .title {
-      font-family: 'Engravers', sans-serif;
-      font-size: 35px;
-      margin-top: 20px;
-      text-align: center;
-      color: rgb(255, 255, 255);
-      font-weight: bold;
-      background-color: rgba(227, 6, 19, 1);
-      width: 100vw;
-      padding: 10px 0;
-    }
-
-    .description {
-      font-family: 'TT Lakes', sans-serif;
       color: white;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 20px;
+      text-align: center;
+      background: linear-gradient(180deg, black 0%, rgb(30, 0, 0) 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      transition: opacity 0.6s ease-in-out;
+      opacity: 0;
     }
 
+    body.fade-in {
+      opacity: 1;
+    }
+
+    /* --- TITRE FIXE --- */
+    .title {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      font-family: 'Engravers', sans-serif;
+      font-size: 30px;
+      color: #fff;
+      background-color: rgba(227, 6, 19, 0.95);
+      padding: 12px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* --- CONTENU --- */
     .container {
       display: flex;
-      margin: 0 auto;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 15px;
+      padding: 20px 10px 100px 10px;
     }
 
     .nouveaute {
-      width: 45%;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 1px;
-      text-align: center;
-      background-color: rgb(50, 50, 50);
+      width: 42%;
+      background-color: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
+    }
+
+    .nouveaute:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(227, 6, 19, 0.6);
     }
 
     .nouveaute img {
       width: 100%;
       height: auto;
-      border-radius: 8px;
+      display: block;
     }
 
-    .nouveaute p {
+    .description {
+      font-family: 'TT Lakes', sans-serif;
+      color: white;
       font-size: 16px;
-      margin-top: 10px;
+      font-weight: bold;
+      margin: 10px;
     }
 
-    /* Fenêtre plein écran */
+    /* --- PLEIN ÉCRAN --- */
     .fullscreen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      background: rgba(0,0,0,0.9);
+      inset: 0;
+      background: rgba(0,0,0,0.92);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
     }
 
-    .fullscreen img {
-      margin-top: 20px;
+    .fullscreen.visible {
+      opacity: 1;
+    }
+
+    .fullscreen img.image {
+      margin-top: 70px;
       width: 95%;
-      height: auto;
+      max-width: 600px;
+      border-radius: 10px;
     }
 
     .fullscreen p {
       color: white;
       font-size: 18px;
       width: 90%;
-    }
-
-    .fullscreen .image {
-      border-radius: 10px;
+      margin-top: 20px;
     }
 
     .fullscreen .logo {
       position: absolute;
-      top: 10px;
-      left:20px;
+      top: 15px;
+      left: 20px;
       width: 60px;
       height: auto;
     }
 
     .close-btn {
       position: absolute;
-      top: 0px;
-      right:20px;
+      top: -5px;
+      right: 20px;
       color: white;
       font-size: 70px;
-      align-text: center;
-      justify-text: center;
       cursor: pointer;
       font-weight: bold;
-    }
-
-    .fade-in {
-      opacity: 1;
-    }
-    .fade-out {
-      opacity: 0;
     }
   </style>
 </head>
 <body>
-
   <h2 class="title">Démo</h2>
   <div class="container" id="nouveautes"></div>
 
@@ -156,13 +153,11 @@
 
     async function chargerNouveautes() {
       const url = `https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=Forets carbure`;
-
       try {
         const response = await fetch(url);
         const text = await response.text();
         const jsonData = JSON.parse(text.substring(47, text.length - 2));
         const rows = jsonData.table.rows;
-
         const container = document.getElementById("nouveautes");
         container.innerHTML = "";
 
@@ -182,7 +177,7 @@
           container.appendChild(div);
         });
       } catch (error) {
-        console.error("Erreur lors du chargement des nouveautés :", error);
+        console.error("Erreur lors du chargement :", error);
       }
     }
 
@@ -194,17 +189,16 @@
 
       fullscreenImage.src = image;
       fullscreenCommentaire.textContent = commentaire;
-
-      // Choisir le logo
-      if (logoIndex == 1) fullscreenLogo.src = logo1;
-      else if (logoIndex == 2) fullscreenLogo.src = logo2;
-      else fullscreenLogo.src = "";
+      fullscreenLogo.src = logoIndex == 1 ? logo1 : logoIndex == 2 ? logo2 : "";
 
       fullscreen.style.display = "flex";
+      requestAnimationFrame(() => fullscreen.classList.add("visible"));
     }
 
     function fermerFullscreen() {
-      document.getElementById("fullscreen-view").style.display = "none";
+      const fs = document.getElementById("fullscreen-view");
+      fs.classList.remove("visible");
+      setTimeout(() => (fs.style.display = "none"), 300);
     }
 
     function recordUserActivity(action, entreprise, nom) {
@@ -219,7 +213,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(activityData)
-      }).catch(err => console.error('Erreur d’enregistrement de l’activité', err));
+      }).catch(err => console.error('Erreur d’enregistrement', err));
     }
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -229,6 +223,5 @@
       requestAnimationFrame(() => document.body.classList.add("fade-in"));
     });
   </script>
-
 </body>
 </html>
