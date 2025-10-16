@@ -161,7 +161,7 @@ async function fetchSheetData(sheetName) {
   if (!rows || rows.length === 0) return null;
 
   const category = rows[1]?.c?.[0]?.v || null; // A2
-  const img = rows[3]?.c?.[0]?.v || null;      // A4
+  const img = rows[4]?.c?.[0]?.v || null;      // A4
   return { img, category };
 }
 
