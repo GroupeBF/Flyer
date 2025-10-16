@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Chargement...</title>
+
+  <style>
+    @font-face {
+      font-family: 'Engravers';
+      src: url('Police Engravers.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'TT Lakes';
+      src: url('Police TTLakes.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      color: white;
+      background-color: black;
+      font-family: 'TT Lakes', sans-serif;
+      overflow-x: hidden;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+    body.fade-in { opacity: 1; }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+      padding: 0px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      z-index: 20;
+    }
+
+    .page-title {
+      font-family: 'Engravers';
+      font-size: 50px;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, rgba(227,6,19,1), #ff5555);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-transform: uppercase;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 2fr));
+      gap: 10px;
+      padding: 10px;
+      perspective: 500px;
+    }
+
+    .nouveaute {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      transform: rotateY(10deg) scale(0.95);
+      transition: transform 0.4s ease, box-shadow 0.4s;
+      cursor: pointer;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .nouveaute:hover {
+      transform: rotateY(5deg) scale(1.03);
+      box-shadow: 0 0 25px rgba(227,6,19,0.7);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .nouveaute img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(227,6,19,0.8);
+    }
+
+    .description {
+      text-align: center;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 5px;
+    }
+
+    .fullscreen {
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 9999;
+    }
+    .fullscreen.visible { opacity: 1; pointer-events: auto; }
+
+    .fullscreen img.image {
+      max-width: 90%;
+      max-height: 70vh;
+      border-radius: 14px;
+      margin-top: 15px;
+      animation: zoomIn 0.5s ease;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .fullscreen p {
+      margin-top: 10px;
+      padding: 5px;
+      backdrop-filter: blur(4px);
+      width: 80%;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .fullscreen .logo {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 70px;
+      height: auto;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0px;
+      right: 30px;
+      font-size: 60px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .close-btn:hover { transform: scale(1.1); }
+
+    @media (max-width: 720px) {
+      .page-title { font-size: 8vw; line-height: 1; white-space: nowrap; }
+      .nouveaute { transform: scale(0.92); }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1 class="page-title" id="title-text"></h1>
+  </header>
+
+  <div class="container" id="nouveautes"></div>
+
+  <div id="fullscreen-view" class="fullscreen">
+    <span class="close-btn" onclick="fermerFullscreen()">×</span>
+    <img id="fullscreen-logo" class="logo" src="">
+    <img id="fullscreen-image" class="image" src="">
+    <p id="fullscreen-commentaire"></p>
+  </div>
+
+  <script>
+    const logo1 = "Photo LogoBF.png";
+    const logo2 = "Photo LogoOSP.png";
+    const spreadsheetId = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
+
+    function getSheetName() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("sheet");
+    }
+
+    async function chargerNouveautes() {
+      const sheetName = getSheetName();
+      document.title = sheetName;
+      document.getElementById("title-text").textContent = sheetName;
+
+      const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+      try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const jsonData = JSON.parse(text.substring(47, text.length - 2));
+        const rows = jsonData.table.rows;
+        const container = document.getElementById("nouveautes");
+        container.innerHTML = "";
+
+        rows.forEach((row, i) => {
+          const imageUrl = row.c[0]?.v;
+          const description = row.c[1]?.v || "";
+          const commentaire = row.c[2]?.v || "";
+          const logoIndex = row.c[3]?.v || "";
+
+          if (!imageUrl) return;
+
+          const div = document.createElement("div");
+          div.className = "nouveaute";
+          div.style.animationDelay = `${i * 0.1}s`;
+          div.innerHTML = `
+            <img src="${imageUrl}" alt="Nouveauté">
+            <p class="description">${description}</p>
+          `;
+          div.addEventListener("click", () => ouvrirFullscreen(imageUrl, commentaire, logoIndex));
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Erreur lors du chargement :", error);
+      }
+    }
+
+    function ouvrirFullscreen(image, commentaire, logoIndex) {
+      const fs = document.getElementById("fullscreen-view");
+      document.getElementById("fullscreen-image").src = image;
+      document.getElementById("fullscreen-commentaire").textContent = commentaire;
+      document.getElementById("fullscreen-logo").src = logoIndex == 1 ? logo1 : logoIndex == 2 ? logo2 : "";
+      fs.classList.add("visible");
+    }
+
+    function fermerFullscreen() {
+      document.getElementById("fullscreen-view").classList.remove("visible");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      requestAnimationFrame(() => document.body.classList.add("fade-in"));
+      chargerNouveautes();
+    });
+  </script>
+</body>
+</html>
