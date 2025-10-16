@@ -180,7 +180,7 @@ async function initDynamicOnglets() {
 
   // Initialisation carrousels
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 20);
+    initPracticalInfiniteCarousel(car, 0);
   });
 }
 
@@ -208,7 +208,7 @@ fetch(urlSlide)
 });
 
 // Carrousel infini
-function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
+function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 0) {
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
   function prepare() {
