@@ -8,12 +8,14 @@
 /* ---------------- POLICES ---------------- */
 @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
 @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
+
 body {
   font-family: 'TT Lakes', sans-serif;
   margin: 0; padding: 0; text-align: center;
   color: white; background-color: black; min-height: 100vh;
   overflow-y: auto;
 }
+
 /* ---------------- HEADER ---------------- */
 header {
   position: sticky; top: 0;
@@ -41,11 +43,24 @@ header img { width: 130px; height: auto; object-fit: contain; }
   text-transform: uppercase;
   margin: 0 auto;
 }
+
 /* ---------------- SLIDESHOW ---------------- */
-.slideshow-container { position: relative; width: 100%; height: 40vh; overflow: hidden; z-index: 5; }
-.slideshow-container img { position: absolute; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
+.slideshow-container {
+  position: relative; width: 100%; height: 40vh;
+  overflow: hidden; z-index: 5;
+}
+.slideshow-container img {
+  position: absolute; width: 100%; height: 100%;
+  object-fit: cover; top: 0; left: 0;
+  opacity: 0; transition: opacity 1.5s ease-in-out;
+}
 .slideshow-container img.active { opacity: 1; }
-.slideshow-gradient { position: absolute; bottom: 0; width: 100%; height: 100px; background: linear-gradient(to bottom, rgba(0,0,0,0), black); z-index: 10; }
+.slideshow-gradient {
+  position: absolute; bottom: 0; width: 100%; height: 100px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), black);
+  z-index: 10;
+}
+
 /* ---------------- CONTENT ---------------- */
 .content { margin-top: 15px; padding-bottom: 50px; position: relative; z-index: 1; }
 .section { margin: 20px 0; }
@@ -55,15 +70,18 @@ header img { width: 130px; height: auto; object-fit: contain; }
   border-radius: 8px; margin-bottom: 10px;
   text-align: left;
 }
+
 /* ---------------- CAROUSEL ---------------- */
 .carousel {
   width: 97.5%; display: flex; margin: 0 auto; justify-content: flex-start;
-  gap: 10px; padding: 5px; overflow-x: auto; scroll-behavior: smooth;
+  gap: 10px; padding: 10px 5px;
+  overflow-x: auto; scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  align-items: flex-start; /* pour stabiliser verticalement */
-  min-height: 210px; /* ajuste pour stabiliser */
+  align-items: stretch; /* empêche le décalage vertical */
+  min-height: 210px;
 }
 .carousel::-webkit-scrollbar { display: none; }
+
 .categorie {
   flex: 0 0 140px; width: 140px; height: 200px;
   border-radius: 12px; overflow: hidden;
@@ -73,8 +91,12 @@ header img { width: 130px; height: auto; object-fit: contain; }
   scroll-snap-align: center; background: #222;
   position: relative; cursor: pointer;
 }
-.categorie img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.82); }
+.categorie img {
+  width: 100%; height: 100%; object-fit: cover;
+  display: block; filter: brightness(0.82);
+}
 .categorie.active { transform: scale(1.08); opacity: 1; }
+
 .overlay {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
@@ -129,7 +151,7 @@ const categories = {
   "Fourniture": document.getElementById("c-fourniture")
 };
 
-// Fonction pour récupérer les données d'une feuille (A5 et F2)
+// 📘 Lecture d'une feuille (image en A5, catégorie en A2)
 async function fetchSheetData(sheetName) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
@@ -137,12 +159,13 @@ async function fetchSheetData(sheetName) {
   const json = JSON.parse(txt.substr(47).slice(0, -2));
   const rows = json.table.rows;
   if (!rows || rows.length === 0) return null;
-  const img = rows[4]?.c?.[0]?.v || null;      // A5 → ligne 5, colonne A
-  const category = rows[1]?.c?.[0]?.v || null; // A2 → ligne 2, colonne A
+
+  const category = rows[1]?.c?.[0]?.v || null; // A2
+  const img = rows[4]?.c?.[0]?.v || null;      // A5
   return { img, category };
 }
 
-// Fonction pour récupérer la liste des noms de feuille depuis "Nom Onglets"
+// 📗 Lecture des noms de feuilles dans "Nom Onglets"
 async function fetchSheetNames() {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=Nom Onglets`;
   const res = await fetch(url);
@@ -153,7 +176,7 @@ async function fetchSheetNames() {
   return rows.map(r => r.c[0]?.v).filter(Boolean);
 }
 
-// Création des onglets dynamiques
+// 📸 Création automatique des onglets
 async function initDynamicOnglets() {
   const sheetNames = await fetchSheetNames();
   for (let sheetName of sheetNames) {
@@ -178,13 +201,12 @@ async function initDynamicOnglets() {
     categories[category].appendChild(a);
   }
 
-  // Initialisation carrousels
   document.querySelectorAll('.carousel').forEach(car => {
-    initPracticalInfiniteCarousel(car, 0);
+    initPracticalInfiniteCarousel(car);
   });
 }
 
-// Diaporama depuis Google Sheets
+// 🎞️ Diaporama
 const urlSlide = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=A l'affiche`;
 fetch(urlSlide)
 .then(res => res.text())
@@ -207,22 +229,11 @@ fetch(urlSlide)
   }, 5000);
 });
 
-// Carrousel infini
-function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 0) {
+// 🌀 Carrousel fluide
+function initPracticalInfiniteCarousel(carousel) {
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
-  function prepare() {
-    const visible = carousel.clientWidth || window.innerWidth;
-    const targetWidth = visible * minRepeatFactor;
-    while (carousel.scrollWidth < targetWidth) {
-      origItems.forEach(it => {
-        const clone = it.cloneNode(true);
-        clone.removeAttribute('id');
-        carousel.appendChild(clone);
-      });
-    }
-    attachCenterListener();
-  }
+
   function attachCenterListener() {
     let ticking = false;
     function onScroll() {
@@ -233,11 +244,8 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 0) {
     }
     carousel.addEventListener('scroll', onScroll, { passive: true });
     updateActiveCenter();
-    window.addEventListener('resize', () => {
-      clearTimeout(carousel._resizeTO);
-      carousel._resizeTO = setTimeout(updateActiveCenter, 120);
-    });
   }
+
   function updateActiveCenter() {
     const centerX = carousel.scrollLeft + carousel.clientWidth / 3;
     let closest = null;
@@ -252,13 +260,11 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 0) {
     });
     if (closest) closest.classList.add('active');
   }
-  if (document.readyState === 'loading') {
-    window.addEventListener('load', prepare, { once: true });
-    setTimeout(prepare, 300);
-  } else { prepare(); }
+
+  attachCenterListener();
 }
 
-// Lancement
+// 🚀 Lancement
 document.addEventListener('DOMContentLoaded', initDynamicOnglets);
 </script>
 </body>
