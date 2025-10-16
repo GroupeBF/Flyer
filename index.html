@@ -1,178 +1,280 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nouveautés</title>
-  <style>
-    @font-face {
-      font-family: 'Engravers';
-      src: url('Police Engravers.ttf') format('truetype');
-    }
-    @font-face {
-      font-family: 'TT Lakes';
-      src: url('Police TTLakes.ttf') format('truetype');
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: white;
-      font-family: 'TT Lakes', sans-serif;
-      overflow-x: hidden;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-    }
-    body.fade-in { opacity: 1; }
-
-    header {
-      position: sticky;
-      top: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      z-index: 10;
-    }
-
-    .page-title {
-      font-family: 'Engravers';
-      font-size: 45px;
-      letter-spacing: 2px;
-      background: linear-gradient(90deg, rgba(227,6,19,1), #ff5555);
-      -webkit-background-clip: text;
-      color: transparent;
-      text-transform: uppercase;
-    }
-
-    .categories {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      padding: 20px;
-    }
-
-    .category {
-      border-top: 2px solid rgba(227,6,19,0.4);
-      padding-top: 10px;
-    }
-
-    .category h2 {
-      font-family: 'Engravers';
-      font-size: 28px;
-      color: rgba(227,6,19,1);
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .tab {
-      width: 180px;
-      height: 180px;
-      border-radius: 15px;
-      border: 2px solid rgba(227,6,19,0.6);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .tab:hover { transform: scale(1.05); }
-
-    .tab img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.9;
-      transition: opacity 0.3s ease;
-    }
-
-    .tab:hover img { opacity: 0.6; }
-
-    .tab span {
-      position: absolute;
-      bottom: 8px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      background: rgba(0,0,0,0.6);
-      padding: 5px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    @media (max-width: 720px) {
-      .page-title { font-size: 8vw; }
-      .tab { width: 40vw; height: 40vw; }
-      .tab span { font-size: 4vw; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Showroom — Nos Réalisations</title>
+<style>
+/* ---------------- POLICES ---------------- */
+@font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
+@font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
+body {
+  font-family: 'TT Lakes', sans-serif;
+  margin: 0; padding: 0; text-align: center;
+  color: white; background-color: black; min-height: 100vh;
+  overflow-y: auto;
+}
+/* ---------------- HEADER ---------------- */
+header {
+  position: sticky; top: 0;
+  background-color: black;
+  padding: 10px 0px 0px 10px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+header::after {
+  content: ""; position: absolute; bottom: -15px; left: 0;
+  width: 100%; height: 15px;
+  background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  pointer-events: none; z-index: -1;
+}
+header img { width: 130px; height: auto; object-fit: contain; }
+.page-title {
+  font-family: 'Engravers'; font-size: 50px;
+  letter-spacing: 2px;
+  color: white;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1), white);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  margin: 0 auto;
+}
+/* ---------------- SLIDESHOW ---------------- */
+.slideshow-container { position: relative; width: 100%; height: 40vh; overflow: hidden; z-index: 5; }
+.slideshow-container img { position: absolute; width: 100%; height: 100%; object-fit: cover; top: 0; left: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
+.slideshow-container img.active { opacity: 1; }
+.slideshow-gradient { position: absolute; bottom: 0; width: 100%; height: 100px; background: linear-gradient(to bottom, rgba(0,0,0,0), black); z-index: 10; }
+/* ---------------- CONTENT ---------------- */
+.content { margin-top: 15px; padding-bottom: 50px; position: relative; z-index: 1; }
+.section { margin: 20px 0; }
+.section h2 {
+  font-family: 'Engravers'; font-size: 25px;
+  color: white; padding: 0 16px;
+  border-radius: 8px; margin-bottom: 10px;
+  text-align: left;
+}
+/* ---------------- CAROUSEL ---------------- */
+.carousel {
+  width: 97.5%; display: flex; margin: 0 auto; justify-content: flex-start;
+  gap: 10px; padding: 5px; overflow-x: auto; scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.carousel::-webkit-scrollbar { display: none; }
+.categorie {
+  flex: 0 0 140px; width: 140px; height: 200px;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 2px 6px 20px rgba(0,0,0,0.45);
+  transform: scale(0.92); opacity: 0.6;
+  transition: transform 220ms ease, opacity 220ms ease;
+  scroll-snap-align: center; background: #222;
+  position: relative; cursor: pointer;
+}
+.categorie img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.82); }
+.categorie.active { transform: scale(1.08); opacity: 1; }
+.overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Engravers'; color: white;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.35));
+  text-align: center; padding: 10px; box-sizing: border-box;
+}
+/* ---------------- LOGO BAS ---------------- */
+.logo-container {
+  position: fixed; bottom: 10px; left: 50%;
+  transform: translateX(-50%); z-index: 20;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px; padding: 6px; max-width: 400px; width: 92%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+#logoBF { width: 100%; height: auto; display: block; }
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 720px) {
+  header img { width: 125px; }
+  .page-title { font-size: 8vw !important; line-height: 1.2; white-space: nowrap; }
+  .section h2 { font-size: 20px; }
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1 class="page-title">Showroom</h1>
-  </header>
 
-  <div class="categories" id="categories-container">
-    <div class="category" id="affutage"><h2>Affûtage</h2><div class="tabs"></div></div>
-    <div class="category" id="fabrication"><h2>Fabrication</h2><div class="tabs"></div></div>
-    <div class="category" id="fourniture"><h2>Fourniture</h2><div class="tabs"></div></div>
+<!-- HEADER -->
+<header>
+  <img src="Photo logo groupe.png" alt="Logo Groupe">
+  <h1 class="page-title">Showroom</h1>
+</header>
+
+<!-- SLIDESHOW -->
+<div class="slideshow-container" id="slideshow">
+  <div class="slideshow-gradient"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+  <div class="section">
+    <h2>Affûtage</h2>
+    <div class="carousel" id="c-affutage"></div>
   </div>
+  <div class="section">
+    <h2>Fabrication</h2>
+    <div class="carousel" id="c-fabrication"></div>
+  </div>
+  <div class="section">
+    <h2>Fourniture</h2>
+    <div class="carousel" id="c-fourniture"></div>
+  </div>
+</div>
 
-  <script>
-    const sheetID = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
+<!-- LOGO BAS -->
+<div class="logo-container">
+  <img id="logoBF" src="Photo logo BF.png" alt="Logo BF">
+</div>
 
-    async function getSheetList() {
-      const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?`);
-      const text = await res.text();
-      const matches = [...text.matchAll(/gid=(\d+).*?name":"(.*?)"/g)];
-      return matches.map(m => ({ gid: m[1], name: m[2] }));
+<!-- SCRIPT -->
+<script>
+// ------------- CONFIGURATION GOOGLE SHEET -------------
+const sheetId = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
+const categories = {
+  "Affûtage": document.getElementById("c-affutage"),
+  "Fabrication": document.getElementById("c-fabrication"),
+  "Fourniture": document.getElementById("c-fourniture")
+};
+
+// ------------- FONCTION RÉCUPÉRATION D'UNE FEUILLE -------------
+async function fetchSheetData(sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  const res = await fetch(url);
+  const txt = await res.text();
+  const json = JSON.parse(txt.substr(47).slice(0, -2));
+  const rows = json.table.rows;
+
+  if (!rows || rows.length === 0) return null;
+
+  const img = rows[0].c[0] ? rows[0].c[0].v : null; // A1
+  const category = rows[0].c[5] ? rows[0].c[5].v : null; // F1
+  return { img, category };
+}
+
+// ------------- FONCTION POUR LISTER TOUTES LES FEUILLES -------------
+async function fetchSheetNames() {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+  const res = await fetch(url);
+  const txt = await res.text();
+  const json = JSON.parse(txt.substr(47).slice(0, -2));
+  // Récupère les noms de toutes les feuilles
+  return json.table.cols.map(c => c.label).filter(Boolean);
+}
+
+// ------------- INITIALISATION DES ONGLETS DYNAMIQUES -------------
+async function initDynamicOnglets() {
+  const sheetNames = ["Fraises carbure","Forets carbure","Fraises HSS","Circulaires","Forets HSS","Autre HSS","Fraises HSS","Fraises HSS"]; // REMPLACE par la liste exacte ou fetchSheetNames() si possible
+
+  for (let sheetName of sheetNames) {
+    const data = await fetchSheetData(sheetName);
+    if (!data) continue;
+    const { img, category } = data;
+    if (!img) continue;
+    if (!categories[category]) continue;
+
+    const a = document.createElement("a");
+    a.className = "categorie";
+    a.href = `souspage.html?sheet=${encodeURIComponent(sheetName)}`;
+
+    const image = document.createElement("img");
+    image.src = img;
+    a.appendChild(image);
+
+    const overlay = document.createElement("div");
+    overlay.className = "overlay";
+    overlay.textContent = sheetName;
+    a.appendChild(overlay);
+
+    categories[category].appendChild(a);
+  }
+
+  // Initialisation des carrousels
+  document.querySelectorAll('.carousel').forEach(car => {
+    initPracticalInfiniteCarousel(car, 20);
+  });
+}
+
+// ------------- DIAPORAMA -------------
+const urlSlide = "https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=A%20l'affiche";
+fetch(urlSlide)
+.then(res => res.text())
+.then(txt => {
+  const data = JSON.parse(txt.substr(47).slice(0, -2));
+  const rows = data.table.rows;
+  const slideshow = document.getElementById("slideshow");
+  rows.forEach((row, i) => {
+    const img = document.createElement("img");
+    img.src = row.c[0].v;
+    if (i === 0) img.classList.add("active");
+    slideshow.appendChild(img);
+  });
+  let current = 0;
+  const images = slideshow.querySelectorAll("img");
+  setInterval(() => {
+    images[current].classList.remove("active");
+    current = (current + 1) % images.length;
+    images[current].classList.add("active");
+  }, 5000);
+});
+
+// ------------- CARROUSEL INFINI -------------
+function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
+  const origItems = Array.from(carousel.querySelectorAll('.categorie'));
+  if (!origItems.length) return;
+  function prepare() {
+    const visible = carousel.clientWidth || window.innerWidth;
+    const targetWidth = visible * minRepeatFactor;
+    while (carousel.scrollWidth < targetWidth) {
+      origItems.forEach(it => {
+        const clone = it.cloneNode(true);
+        clone.removeAttribute('id');
+        carousel.appendChild(clone);
+      });
     }
-
-    async function getCategoryAndImage(sheetName) {
-      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=A1:F1`;
-      const res = await fetch(url);
-      const text = await res.text();
-      const json = JSON.parse(text.substring(47, text.length - 2));
-      const firstImage = json.table.rows[0]?.c[0]?.v || '';
-      const category = json.table.rows[0]?.c[5]?.v || "Fourniture";
-      return { firstImage, category };
-    }
-
-    async function createTabs() {
-      const sheets = await getSheetList();
-      for (const { name } of sheets) {
-        const { firstImage, category } = await getCategoryAndImage(name);
-        const cat = category.toLowerCase();
-        const container = document.querySelector(`#${cat} .tabs`);
-        if (!container) continue;
-
-        const tab = document.createElement("div");
-        tab.className = "tab";
-        tab.innerHTML = `
-          <img src="${firstImage}" alt="${name}">
-          <span>${name}</span>
-        `;
-        tab.onclick = () => {
-          window.location.href = `souspage.html?sheet=${encodeURIComponent(name)}`;
-        };
-        container.appendChild(tab);
+    attachCenterListener();
+  }
+  function attachCenterListener() {
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => { updateActiveCenter(); ticking = false; });
+        ticking = true;
       }
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.body.classList.add("fade-in");
-      createTabs();
+    carousel.addEventListener('scroll', onScroll, { passive: true });
+    updateActiveCenter();
+    window.addEventListener('resize', () => {
+      clearTimeout(carousel._resizeTO);
+      carousel._resizeTO = setTimeout(updateActiveCenter, 120);
     });
-  </script>
+  }
+  function updateActiveCenter() {
+    const centerX = carousel.scrollLeft + carousel.clientWidth / 3;
+    let closest = null;
+    let minDist = Infinity;
+    const items = Array.from(carousel.querySelectorAll('.categorie'));
+    items.forEach(item => {
+      const itemLeft = item.offsetLeft;
+      const itemCenter = itemLeft + item.offsetWidth / 2;
+      const dist = Math.abs(centerX - itemCenter);
+      if (dist < minDist) { minDist = dist; closest = item; }
+      item.classList.remove('active');
+    });
+    if (closest) closest.classList.add('active');
+  }
+  if (document.readyState === 'loading') {
+    window.addEventListener('load', prepare, { once: true });
+    setTimeout(prepare, 300);
+  } else { prepare(); }
+}
+
+// LANCEMENT
+document.addEventListener('DOMContentLoaded', initDynamicOnglets);
+</script>
 </body>
 </html>
