@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Showroom — Nos Réalisations</title>
 <style>
-/* ---------------- POLICES ---------------- */
 @font-face { font-family: 'Engravers'; src: url('Police Engravers.ttf') format('truetype'); }
 @font-face { font-family: 'TT Lakes'; src: url('Police TTLakes.ttf') format('truetype'); }
 
@@ -16,7 +15,6 @@ body {
   overflow-y: auto;
 }
 
-/* ---------------- HEADER ---------------- */
 header {
   position: sticky; top: 0;
   background-color: black;
@@ -44,7 +42,6 @@ header img { width: 130px; height: auto; object-fit: contain; }
   margin: 0 auto;
 }
 
-/* ---------------- SLIDESHOW ---------------- */
 .slideshow-container {
   position: relative; width: 100%; height: 40vh;
   overflow: hidden; z-index: 5;
@@ -61,7 +58,6 @@ header img { width: 130px; height: auto; object-fit: contain; }
   z-index: 10;
 }
 
-/* ---------------- CONTENT ---------------- */
 .content { margin-top: 15px; padding-bottom: 50px; position: relative; z-index: 1; }
 .section { margin: 20px 0; }
 .section h2 {
@@ -71,14 +67,12 @@ header img { width: 130px; height: auto; object-fit: contain; }
   text-align: left;
 }
 
-/* ---------------- CAROUSEL ---------------- */
 .carousel {
   width: 97.5%; display: flex; margin: 0 auto; justify-content: flex-start;
   gap: 10px; padding: 10px 5px;
   overflow-x: auto; scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
-  align-items: stretch; /* empêche le décalage vertical */
-  min-height: 210px;
+  align-items: stretch; min-height: 210px;
 }
 .carousel::-webkit-scrollbar { display: none; }
 
@@ -105,7 +99,6 @@ header img { width: 130px; height: auto; object-fit: contain; }
   text-align: center; padding: 10px; box-sizing: border-box;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 720px) {
   header img { width: 125px; }
   .page-title { font-size: 8vw !important; line-height: 1.2; white-space: nowrap; }
@@ -115,18 +108,15 @@ header img { width: 130px; height: auto; object-fit: contain; }
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <img src="Photo logo groupe.png" alt="Logo Groupe">
   <h1 class="page-title">Showroom</h1>
 </header>
 
-<!-- SLIDESHOW -->
 <div class="slideshow-container" id="slideshow">
   <div class="slideshow-gradient"></div>
 </div>
 
-<!-- CONTENT -->
 <div class="content">
   <div class="section">
     <h2>Affûtage</h2>
@@ -142,7 +132,6 @@ header img { width: 130px; height: auto; object-fit: contain; }
   </div>
 </div>
 
-<!-- SCRIPT -->
 <script>
 const sheetId = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
 const categories = {
@@ -151,7 +140,6 @@ const categories = {
   "Fourniture": document.getElementById("c-fourniture")
 };
 
-// 📘 Lecture d'une feuille (image en A5, catégorie en A2)
 async function fetchSheetData(sheetName) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
@@ -159,13 +147,11 @@ async function fetchSheetData(sheetName) {
   const json = JSON.parse(txt.substr(47).slice(0, -2));
   const rows = json.table.rows;
   if (!rows || rows.length === 0) return null;
-
-  const category = rows[1]?.c?.[0]?.v || null; // A2
-  const img = rows[4]?.c?.[0]?.v || null;      // A4
+  const category = rows[1]?.c?.[0]?.v || null;
+  const img = rows[4]?.c?.[0]?.v || null;
   return { img, category };
 }
 
-// 📗 Lecture des noms de feuilles dans "Nom Onglets"
 async function fetchSheetNames() {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=Nom Onglets`;
   const res = await fetch(url);
@@ -176,7 +162,6 @@ async function fetchSheetNames() {
   return rows.map(r => r.c[0]?.v).filter(Boolean);
 }
 
-// 📸 Création automatique des onglets
 async function initDynamicOnglets() {
   const sheetNames = await fetchSheetNames();
   for (let sheetName of sheetNames) {
@@ -201,12 +186,19 @@ async function initDynamicOnglets() {
     categories[category].appendChild(a);
   }
 
+  // 🚨 AJOUT DE LA CASE NOIRE À LA FIN DE CHAQUE CARROUSEL
+  Object.values(categories).forEach(car => {
+    const filler = document.createElement("div");
+    filler.className = "categorie";
+    filler.style.background = "black";
+    car.appendChild(filler);
+  });
+
   document.querySelectorAll('.carousel').forEach(car => {
     initPracticalInfiniteCarousel(car);
   });
 }
 
-// 🎞️ Diaporama
 const urlSlide = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=A l'affiche`;
 fetch(urlSlide)
 .then(res => res.text())
@@ -229,7 +221,6 @@ fetch(urlSlide)
   }, 5000);
 });
 
-// 🌀 Carrousel fluide
 function initPracticalInfiniteCarousel(carousel) {
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
@@ -264,7 +255,6 @@ function initPracticalInfiniteCarousel(carousel) {
   attachCenterListener();
 }
 
-// 🚀 Lancement
 document.addEventListener('DOMContentLoaded', initDynamicOnglets);
 </script>
 </body>
