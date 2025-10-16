@@ -172,8 +172,8 @@
   </div>
 
   <script>
-    const logo1 = "Photo LogoBF.png";
-    const logo2 = "Photo LogoOSP.png";
+    const logoBF = "Photo LogoBF.png";
+    const logoOSP = "Photo LogoOSP.png";
     const spreadsheetId = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
 
     function getSheetName() {
@@ -195,11 +195,12 @@
         const container = document.getElementById("nouveautes");
         container.innerHTML = "";
 
-        rows.forEach((row, i) => {
+        // On commence à A10 donc on ignore les 9 premières lignes
+        rows.slice(9).forEach((row, i) => {
           const imageUrl = row.c[0]?.v;
           const description = row.c[1]?.v || "";
           const commentaire = row.c[2]?.v || "";
-          const logoIndex = row.c[3]?.v || "";
+          const logoCode = row.c[3]?.v || "";
 
           if (!imageUrl) return;
 
@@ -210,7 +211,7 @@
             <img src="${imageUrl}" alt="Nouveauté">
             <p class="description">${description}</p>
           `;
-          div.addEventListener("click", () => ouvrirFullscreen(imageUrl, commentaire, logoIndex));
+          div.addEventListener("click", () => ouvrirFullscreen(imageUrl, commentaire, logoCode));
           container.appendChild(div);
         });
       } catch (error) {
@@ -218,11 +219,11 @@
       }
     }
 
-    function ouvrirFullscreen(image, commentaire, logoIndex) {
+    function ouvrirFullscreen(image, commentaire, logoCode) {
       const fs = document.getElementById("fullscreen-view");
       document.getElementById("fullscreen-image").src = image;
       document.getElementById("fullscreen-commentaire").textContent = commentaire;
-      document.getElementById("fullscreen-logo").src = logoIndex == 1 ? logo1 : logoIndex == 2 ? logo2 : "";
+      document.getElementById("fullscreen-logo").src = logoCode === "BF" ? logoBF : logoCode === "OSP" ? logoOSP : "";
       fs.classList.add("visible");
     }
 
