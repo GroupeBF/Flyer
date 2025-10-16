@@ -60,6 +60,8 @@ header img { width: 130px; height: auto; object-fit: contain; }
   width: 97.5%; display: flex; margin: 0 auto; justify-content: flex-start;
   gap: 10px; padding: 5px; overflow-x: auto; scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  align-items: flex-start; /* pour stabiliser verticalement */
+  min-height: 210px; /* ajuste pour stabiliser */
 }
 .carousel::-webkit-scrollbar { display: none; }
 .categorie {
@@ -133,7 +135,6 @@ header img { width: 130px; height: auto; object-fit: contain; }
 
 <!-- SCRIPT -->
 <script>
-// ------------- CONFIGURATION GOOGLE SHEET -------------
 const sheetId = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
 const categories = {
   "Affûtage": document.getElementById("c-affutage"),
@@ -141,41 +142,38 @@ const categories = {
   "Fourniture": document.getElementById("c-fourniture")
 };
 
-// ------------- FONCTION RÉCUPÉRATION D'UNE FEUILLE -------------
+// Fonction pour récupérer les données d'une feuille (A1 et F1)
 async function fetchSheetData(sheetName) {
   const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
   const txt = await res.text();
   const json = JSON.parse(txt.substr(47).slice(0, -2));
   const rows = json.table.rows;
-
   if (!rows || rows.length === 0) return null;
-
-  const img = rows[0].c[0] ? rows[0].c[0].v : null; // A1
-  const category = rows[0].c[5] ? rows[0].c[5].v : null; // F1
+  const img = rows[0].c[0] ? rows[0].c[0].v : null;
+  const category = rows[0].c[5] ? rows[0].c[5].v : null;
   return { img, category };
 }
 
-// ------------- FONCTION POUR LISTER TOUTES LES FEUILLES -------------
+// Fonction pour récupérer la liste des noms de feuille depuis "Nom Onglets"
 async function fetchSheetNames() {
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=Nom Onglets`;
   const res = await fetch(url);
   const txt = await res.text();
   const json = JSON.parse(txt.substr(47).slice(0, -2));
-  // Récupère les noms de toutes les feuilles
-  return json.table.cols.map(c => c.label).filter(Boolean);
+  const rows = json.table.rows;
+  if (!rows) return [];
+  return rows.map(r => r.c[0]?.v).filter(Boolean);
 }
 
-// ------------- INITIALISATION DES ONGLETS DYNAMIQUES -------------
+// Création des onglets dynamiques
 async function initDynamicOnglets() {
-  const sheetNames = ["Fraises carbure","Forets carbure","Fraises HSS","Circulaires","Forets HSS","Autre HSS","Fraises HSS","Fraises HSS"]; // REMPLACE par la liste exacte ou fetchSheetNames() si possible
-
+  const sheetNames = await fetchSheetNames();
   for (let sheetName of sheetNames) {
     const data = await fetchSheetData(sheetName);
     if (!data) continue;
     const { img, category } = data;
-    if (!img) continue;
-    if (!categories[category]) continue;
+    if (!img || !categories[category]) continue;
 
     const a = document.createElement("a");
     a.className = "categorie";
@@ -193,14 +191,14 @@ async function initDynamicOnglets() {
     categories[category].appendChild(a);
   }
 
-  // Initialisation des carrousels
+  // Initialisation carrousels
   document.querySelectorAll('.carousel').forEach(car => {
     initPracticalInfiniteCarousel(car, 20);
   });
 }
 
-// ------------- DIAPORAMA -------------
-const urlSlide = "https://docs.google.com/spreadsheets/d/1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s/gviz/tq?tqx=out:json&sheet=A%20l'affiche";
+// Diaporama depuis Google Sheets
+const urlSlide = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=A l'affiche`;
 fetch(urlSlide)
 .then(res => res.text())
 .then(txt => {
@@ -222,7 +220,7 @@ fetch(urlSlide)
   }, 5000);
 });
 
-// ------------- CARROUSEL INFINI -------------
+// Carrousel infini
 function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
   const origItems = Array.from(carousel.querySelectorAll('.categorie'));
   if (!origItems.length) return;
@@ -273,7 +271,7 @@ function initPracticalInfiniteCarousel(carousel, minRepeatFactor = 20) {
   } else { prepare(); }
 }
 
-// LANCEMENT
+// Lancement
 document.addEventListener('DOMContentLoaded', initDynamicOnglets);
 </script>
 </body>
