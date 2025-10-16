@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Showroom</title>
-
+  <title>Nouveautés</title>
   <style>
     @font-face {
       font-family: 'Engravers';
@@ -33,7 +32,9 @@
       background: rgba(0,0,0,0.7);
       backdrop-filter: blur(6px);
       padding: 10px 20px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       border-bottom: 1px solid rgba(255,255,255,0.1);
       z-index: 10;
     }
@@ -42,7 +43,7 @@
       font-family: 'Engravers';
       font-size: 45px;
       letter-spacing: 2px;
-      background-color: white;
+      background: linear-gradient(90deg, rgba(227,6,19,1), #ff5555);
       -webkit-background-clip: text;
       color: transparent;
       text-transform: uppercase;
@@ -63,7 +64,7 @@
     .category h2 {
       font-family: 'Engravers';
       font-size: 28px;
-      color: white;
+      color: rgba(227,6,19,1);
       margin-bottom: 10px;
       text-transform: uppercase;
     }
@@ -71,49 +72,51 @@
     .tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 16px;
     }
 
     .tab {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 140px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(227,6,19,0.4);
-      cursor: pointer;
+      width: 180px;
+      height: 180px;
+      border-radius: 15px;
+      border: 2px solid rgba(227,6,19,0.6);
       overflow: hidden;
-      transition: all 0.3s ease;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
 
-    .tab:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(227,6,19,0.7);
-    }
+    .tab:hover { transform: scale(1.05); }
 
     .tab img {
       width: 100%;
-      height: 100px;
+      height: 100%;
       object-fit: cover;
-      border-bottom: 1px solid rgba(227,6,19,0.8);
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
     }
 
-    .tab p {
-      margin: 8px 0;
+    .tab:hover img { opacity: 0.6; }
+
+    .tab span {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      background: rgba(0,0,0,0.6);
+      padding: 5px;
       font-weight: bold;
       font-size: 14px;
     }
 
     @media (max-width: 720px) {
       .page-title { font-size: 8vw; }
-      .tab { width: 42vw; }
-      .tab p { font-size: 4vw; }
+      .tab { width: 40vw; height: 40vw; }
+      .tab span { font-size: 4vw; }
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1 class="page-title">Showroom</h1>
@@ -126,43 +129,43 @@
   </div>
 
   <script>
-    const SHEET_ID = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
+    const sheetID = "1_84sDZMYdBImYk5pAG6HKb2pp5wqgpEUoHH9pJI727s";
 
-    // Charge la liste d’onglets à partir de la feuille "Index"
-    async function getSheetsFromIndex() {
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Index`;
+    async function getSheetList() {
+      const res = await fetch(`https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?`);
+      const text = await res.text();
+      const matches = [...text.matchAll(/gid=(\d+).*?name":"(.*?)"/g)];
+      return matches.map(m => ({ gid: m[1], name: m[2] }));
+    }
+
+    async function getCategoryAndImage(sheetName) {
+      const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=A1:F1`;
       const res = await fetch(url);
       const text = await res.text();
       const json = JSON.parse(text.substring(47, text.length - 2));
-      return json.table.rows.map(r => ({
-        name: r.c[0]?.v,
-        category: (r.c[1]?.v || "Fourniture").toLowerCase()
-      })).filter(r => r.name);
-    }
-
-    // Récupère la première image de la colonne A d’une feuille
-    async function getFirstImage(sheetName) {
-      try {
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=A1`;
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substring(47, text.length - 2));
-        return json.table.rows[0]?.c[0]?.v || "https://via.placeholder.com/150x100/000000/FFFFFF?text=Photo";
-      } catch {
-        return "https://via.placeholder.com/150x100/000000/FFFFFF?text=Photo";
-      }
+      const firstImage = json.table.rows[0]?.c[0]?.v || '';
+      const category = json.table.rows[0]?.c[5]?.v || "Fourniture";
+      return { firstImage, category };
     }
 
     async function createTabs() {
-      const sheets = await getSheetsFromIndex();
-      for (const sheet of sheets) {
-        const imageUrl = await getFirstImage(sheet.name);
+      const sheets = await getSheetList();
+      for (const { name } of sheets) {
+        const { firstImage, category } = await getCategoryAndImage(name);
+        const cat = category.toLowerCase();
+        const container = document.querySelector(`#${cat} .tabs`);
+        if (!container) continue;
+
         const tab = document.createElement("div");
         tab.className = "tab";
-        tab.innerHTML = `<img src="${imageUrl}" alt=""><p>${sheet.name}</p>`;
-        tab.onclick = () => window.location.href = `souspage.html?sheet=${encodeURIComponent(sheet.name)}`;
-        const container = document.querySelector(`#${sheet.category} .tabs`);
-        if (container) container.appendChild(tab);
+        tab.innerHTML = `
+          <img src="${firstImage}" alt="${name}">
+          <span>${name}</span>
+        `;
+        tab.onclick = () => {
+          window.location.href = `souspage.html?sheet=${encodeURIComponent(name)}`;
+        };
+        container.appendChild(tab);
       }
     }
 
