@@ -137,8 +137,8 @@ async function fetchSheetData(sheetName) {
   const json = JSON.parse(txt.substr(47).slice(0, -2));
   const rows = json.table.rows;
   if (!rows || rows.length === 0) return null;
-  const img = rows[0].c[4] ? rows[0].c[4].v : null;  // A5
-  const category = rows[0].c[1] ? rows[0].c[1].v : null; // A2
+  const img = rows[4].c[0] ? rows[4].c[0].v : null;  // A5
+  const category = rows[1].c[0] ? rows[1].c[0].v : null; // A2
   return { img, category };
 }
 
